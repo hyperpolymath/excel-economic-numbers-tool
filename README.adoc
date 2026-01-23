@@ -151,7 +151,7 @@ See link:docs/api/architecture.md[Architecture Overview] for details.
 
 See link:docs/api/developer_guide.md[Developer Guide] for setup instructions.
 
-=== Language Policy
+=== Language Base
 
 Per link:.claude/PROJECT.md[Hyperpolymath Standard]:
 
@@ -159,8 +159,6 @@ Per link:.claude/PROJECT.md[Hyperpolymath Standard]:
 * ✅ Julia (data processing, batch scripts)
 * ✅ Deno (runtime, package management)
 * ✅ Rust (performance-critical, WASM)
-* ❌ TypeScript (use ReScript instead)
-* ❌ Node.js/npm/bun (use Deno instead)
 
 == Contributing
 
