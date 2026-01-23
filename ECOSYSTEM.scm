@@ -1,20 +1,32 @@
-;; SPDX-License-Identifier: PMPL-1.0
-;; ECOSYSTEM.scm - Project relationship mapping
+;;; SPDX-License-Identifier: PMPL-1.0-or-later
+;;;
+;;; ECOSYSTEM.scm - Excel Economic Numbers Tool Ecosystem Position
 
 (ecosystem
   (version "1.0")
-  (name "excel-economic-numbers-tool")
-  (type "project")
-  (purpose "The Excel Economic Toolkit is a powerful, production-ready add-in that brings ad")
+  (name "Excel Economic Numbers Tool")
+  (type "economic-data-platform")
+  (purpose "Multi-platform economic data access and analysis")
 
-  (position-in-ecosystem
-    (role "component")
-    (layer "application")
-    (description "The Excel Economic Toolkit is a powerful, production-ready add-in that brings ad"))
+  (related-projects
+    (sibling-standard
+      (name "FRED API")
+      (relationship "Data source provider")
+      (url "https://fred.stlouisfed.org/docs/api/"))
 
-  (related-projects . ())
+    (sibling-standard
+      (name "World Bank API")
+      (relationship "Data source provider")
+      (url "https://datahelpdesk.worldbank.org/")))
 
   (what-this-is
-    "The Excel Economic Toolkit is a powerful, production-ready add-in that brings ad")
+    "Multi-platform toolkit for economic data access and analysis"
+    "Integration layer for 10+ major economic data sources"
+    "Real-time collaboration platform for teams"
+    "Community-governed open source project")
 
-  (what-this-is-not . ()))
+  (what-this-is-not
+    "Not a financial trading platform"
+    "Not a premium data provider"
+    "Not a statistical analysis software"
+    "Not closed-source commercial software"))
