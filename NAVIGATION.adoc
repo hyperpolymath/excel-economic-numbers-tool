@@ -1,0 +1,186 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
+
+= Repository Navigation Guide
+
+This guide helps you navigate the excel-economic-numbers-tool repository structure.
+
+== Quick Start Files (Root Level)
+
+[cols="1,3"]
+|===
+|File/Directory |Purpose
+
+|**README.adoc** |Project overview, installation, quick start
+|**LICENSE** |PMPL-1.0-or-later license text
+|**VERSION** |Current version number
+|**package.json** |Deno/ReScript package configuration
+|===
+
+== Source Code
+
+[cols="1,3"]
+|===
+|Directory |Contents
+
+|**src/** |All source code
+|**src/rescript/** |ReScript application code (UI, adapters)
+|**src/julia/** |Julia backend (data sources, formulas, cache)
+|**tests/** |Test suites (organized by language)
+|**examples/** |Usage examples and sample code
+|===
+
+== Documentation
+
+[cols="1,3"]
+|===
+|Directory |Contents
+
+|**docs/api/** |API reference, architecture, data sources guide
+|**docs/governance/** |CODE_OF_CONDUCT, CONTRIBUTING, MAINTAINERS, SECURITY, TPCF
+|**docs/standards/** |RSR compliance documentation
+|**docs/changelog/** |Version history and changes
+|===
+
+**Key governance documents:**
+
+* link:docs/governance/CONTRIBUTING.adoc[Contributing Guide] - How to contribute
+* link:docs/governance/CODE_OF_CONDUCT.md[Code of Conduct] - Community standards
+* link:docs/governance/SECURITY.md[Security Policy] - Reporting vulnerabilities
+* link:docs/governance/TPCF.md[TPCF Framework] - Contribution perimeter
+* link:docs/governance/MAINTAINERS.adoc[Maintainers] - Project maintainers
+
+**Technical documentation:**
+
+* link:docs/api/api_reference.md[API Reference] - Function documentation
+* link:docs/api/architecture.md[Architecture] - System design
+* link:docs/api/data_sources.md[Data Sources] - Data provider integration
+* link:docs/api/developer_guide.md[Developer Guide] - Setup and development
+
+== Build & Automation
+
+[cols="1,3"]
+|===
+|Directory |Contents
+
+|**.build/** |Build configuration and tooling
+|**.build/Justfile** |Task automation (build, test, deploy)
+|**.build/Containerfile** |Container image definition
+|**.build/config/** |Tool configurations (Deno, ReScript, etc.)
+|**scripts/** |Utility scripts (bootstrap, deploy, verification)
+|===
+
+== Project Metadata
+
+[cols="1,3"]
+|===
+|File |Purpose
+
+|**STATE.scm** |Current project state and progress (symlink)
+|**META.scm** |Architecture decisions and practices (symlink)
+|**ECOSYSTEM.scm** |Position in ecosystem, related projects (symlink)
+|===
+
+These are **symlinks** to `.machine_readable/` for tool access.
+
+== Hidden Directories
+
+[cols="1,3"]
+|===
+|Directory |Purpose
+
+|**.claude/** |AI assistant instructions and context
+|**.machine_readable/** |Structured metadata for tooling (SCM files)
+|**.github/** |GitHub Actions workflows and templates
+|**.gitlab-ci.yml** |GitLab CI/CD configuration
+|===
+
+== Common Tasks
+
+=== Building the Project
+
+[source,bash]
+----
+cd .build/
+just build           # Build all platforms
+just build-excel     # Build Excel add-in only
+just build-libre     # Build LibreOffice extension
+----
+
+=== Running Tests
+
+[source,bash]
+----
+deno test            # Run Deno/ReScript tests
+just test            # Run all tests (Julia + Deno)
+----
+
+=== Development
+
+[source,bash]
+----
+just dev             # Start development servers
+just watch           # Watch mode for auto-rebuild
+----
+
+=== Contributing
+
+1. Read link:docs/governance/CONTRIBUTING.adoc[Contributing Guide]
+2. Check link:docs/governance/CODE_OF_CONDUCT.md[Code of Conduct]
+3. Review link:docs/standards/RSR.md[RSR Standards]
+4. Follow the link:docs/api/developer_guide.md[Developer Guide]
+
+== Directory Tree Overview
+
+[source]
+----
+excel-economic-numbers-tool/
+├── README.adoc                    # Start here
+├── NAVIGATION.adoc                # This file
+├── LICENSE                        # Legal terms
+├── VERSION                        # Version number
+├── package.json                   # Package config
+│
+├── src/                           # Source code
+│   ├── rescript/                  # ReScript UI
+│   └── julia/                     # Julia backend
+│
+├── tests/                         # Test suites
+│   ├── rescript/                  # ReScript tests
+│   └── julia/                     # Julia tests
+│
+├── examples/                      # Usage examples
+│
+├── docs/                          # Documentation
+│   ├── api/                       # Technical docs
+│   ├── governance/                # Community docs
+│   ├── standards/                 # Compliance docs
+│   └── changelog/                 # Version history
+│
+├── .build/                        # Build system
+│   ├── Justfile                   # Task runner
+│   ├── Containerfile              # Container image
+│   └── config/                    # Tool configs
+│
+├── scripts/                       # Utility scripts
+│
+├── STATE.scm                      # Project state
+├── META.scm                       # Architecture decisions
+└── ECOSYSTEM.scm                  # Ecosystem context
+----
+
+== Getting Help
+
+* **Issues**: https://github.com/hyperpolymath/excel-economic-numbers-tool/issues
+* **Discussions**: https://github.com/hyperpolymath/excel-economic-numbers-tool/discussions
+* **Security**: See link:docs/governance/SECURITY.md[Security Policy]
+
+== Document Conventions
+
+* **`.adoc`** - AsciiDoc format (preferred for complex docs)
+* **`.md`** - Markdown format (for GitHub compatibility)
+* **`.scm`** - Guile Scheme (machine-readable metadata)
+
+---
+
+**Last updated:** 2026-01-23

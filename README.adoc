@@ -7,10 +7,12 @@ image:https://img.shields.io/github/workflow/status/hyperpolymath/excel-economic
 image:https://img.shields.io/codecov/c/github/hyperpolymath/excel-economic-numbers-tool[Coverage,link=https://codecov.io/gh/hyperpolymath/excel-economic-numbers-tool]
 image:https://img.shields.io/npm/v/economic-toolkit-v2[Version,link=https://www.npmjs.com/package/economic-toolkit-v2]
 image:https://img.shields.io/badge/license-PMPL--1.0--or--later-blue.svg[License,link=LICENSE]
-image:https://img.shields.io/badge/RSR-89%25%20Bronze-cd7f32[RSR Compliance,link=RSR.md]
-image:https://img.shields.io/badge/TPCF-Perimeter%203-green[TPCF,link=TPCF.md]
+image:https://img.shields.io/badge/RSR-89%25%20Bronze-cd7f32[RSR Compliance,link=docs/standards/RSR.md]
+image:https://img.shields.io/badge/TPCF-Perimeter%203-green[TPCF,link=docs/governance/TPCF.md]
 
 Cross-platform Excel/LibreOffice add-in for economic modeling, data analysis, and research.
+
+**📖 New to this repository?** See link:NAVIGATION.adoc[Navigation Guide] for directory structure and quick links.
 
 == Features
 
@@ -63,13 +65,17 @@ rescript build
 deno test
 julia --project tests/runtests.jl
 
-# Build add-in
-just build
+# Build add-in (from .build/ directory)
+cd .build && just build
+
+# Or build specific platforms
+cd .build && just build-excel    # Excel only
+cd .build && just build-libre    # LibreOffice only
 ----
 
 == Usage
 
-See link:docs/api_reference.md[API Reference] for detailed function documentation.
+See link:docs/api/api_reference.md[API Reference] for detailed function documentation.
 
 === Fetch Economic Data
 
@@ -113,7 +119,7 @@ See link:docs/api_reference.md[API Reference] for detailed function documentatio
 |DBnomics |Aggregated economic databases |No
 |===
 
-Configuration: link:docs/data_sources.md[Data Sources Guide]
+Configuration: link:docs/api/data_sources.md[Data Sources Guide]
 
 == Architecture
 
@@ -126,21 +132,28 @@ excel-economic-numbers-tool/
 ├── tests/
 │   ├── rescript/       # ReScript tests
 │   └── julia/          # Julia tests
-├── docs/               # Documentation
+├── docs/               # Documentation (organized by purpose)
+│   ├── api/            # Technical documentation
+│   ├── governance/     # Community and contribution docs
+│   ├── standards/      # Compliance documentation
+│   └── changelog/      # Version history
+├── .build/             # Build system and tooling config
+│   ├── Justfile        # Task automation
+│   ├── Containerfile   # Container image
+│   └── config/         # Tool configurations
 ├── examples/           # Usage examples
-├── config/             # Build and tooling config
-└── scripts/            # Automation scripts
+└── scripts/            # Utility scripts
 ----
 
-See link:docs/architecture.md[Architecture Overview] for details.
+See link:docs/api/architecture.md[Architecture Overview] for details.
 
 == Development
 
-See link:docs/developer_guide.md[Developer Guide] for setup instructions.
+See link:docs/api/developer_guide.md[Developer Guide] for setup instructions.
 
 === Language Policy
 
-Per link:CLAUDE.md[Hyperpolymath Standard]:
+Per link:.claude/PROJECT.md[Hyperpolymath Standard]:
 
 * ✅ ReScript (primary application code)
 * ✅ Julia (data processing, batch scripts)
@@ -151,11 +164,11 @@ Per link:CLAUDE.md[Hyperpolymath Standard]:
 
 == Contributing
 
-See link:CONTRIBUTING.adoc[Contributing Guide] and link:CODE_OF_CONDUCT.md[Code of Conduct].
+See link:docs/governance/CONTRIBUTING.adoc[Contributing Guide] and link:docs/governance/CODE_OF_CONDUCT.md[Code of Conduct].
 
-* *Contribution Framework*: link:TPCF.md[TPCF Perimeter 3] (Community Sandbox)
-* *Standards Compliance*: link:RSR.md[RSR 89% Bronze]
-* *Security Policy*: link:SECURITY.md[Security]
+* *Contribution Framework*: link:docs/governance/TPCF.md[TPCF Perimeter 3] (Community Sandbox)
+* *Standards Compliance*: link:docs/standards/RSR.md[RSR 89% Bronze]
+* *Security Policy*: link:docs/governance/SECURITY.md[Security]
 
 == Roadmap
 

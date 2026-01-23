@@ -1,0 +1,131 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
+
+= Documentation Directory
+
+This directory contains all project documentation organized by purpose.
+
+== Structure
+
+[source]
+----
+docs/
+├── README.adoc               # This file
+├── api/                      # Technical documentation
+│   ├── api_reference.md      # Function and API reference
+│   ├── architecture.md       # System architecture
+│   ├── data_sources.md       # Data provider integration
+│   └── developer_guide.md    # Development setup
+├── governance/               # Community and process docs
+│   ├── CODE_OF_CONDUCT.md    # Community standards
+│   ├── CONTRIBUTING.adoc     # How to contribute
+│   ├── MAINTAINERS.adoc      # Project maintainers
+│   ├── SECURITY.md           # Security policy
+│   └── TPCF.md               # Contribution framework
+├── standards/                # Compliance documentation
+│   └── RSR.md                # Rhodium Standard Repository
+└── changelog/                # Version history
+    └── CHANGELOG.adoc        # Change log
+----
+
+== Documentation Categories
+
+=== API Documentation (`api/`)
+
+**For developers building with or extending the toolkit.**
+
+* link:api/api_reference.md[API Reference] - Complete function documentation
+* link:api/architecture.md[Architecture] - System design and components
+* link:api/data_sources.md[Data Sources] - How to integrate data providers
+* link:api/developer_guide.md[Developer Guide] - Setup, build, test
+
+=== Governance (`governance/`)
+
+**For contributors and community members.**
+
+* link:governance/CODE_OF_CONDUCT.md[Code of Conduct] - Community behavior standards
+* link:governance/CONTRIBUTING.adoc[Contributing Guide] - How to contribute code/docs
+* link:governance/MAINTAINERS.adoc[Maintainers] - Who maintains what
+* link:governance/SECURITY.md[Security Policy] - How to report vulnerabilities
+* link:governance/TPCF.md[TPCF Framework] - Trust Perimeter Contribution Framework
+
+=== Standards (`standards/`)
+
+**For understanding project quality standards.**
+
+* link:standards/RSR.md[RSR Compliance] - Rhodium Standard Repository (89% Bronze)
+
+=== Changelog (`changelog/`)
+
+**For tracking version history.**
+
+* link:changelog/CHANGELOG.adoc[Changelog] - Version history and changes
+
+== Quick Links by Role
+
+=== I want to...
+
+**...use the toolkit**
+→ Start with link:../README.adoc[main README]
+
+**...contribute code**
+→ Read link:governance/CONTRIBUTING.adoc[Contributing Guide], then link:api/developer_guide.md[Developer Guide]
+
+**...report a security issue**
+→ Follow link:governance/SECURITY.md[Security Policy]
+
+**...understand the architecture**
+→ See link:api/architecture.md[Architecture]
+
+**...add a new data source**
+→ Check link:api/data_sources.md[Data Sources Guide]
+
+**...check compliance status**
+→ Review link:standards/RSR.md[RSR Standards]
+
+**...see what changed**
+→ Browse link:changelog/CHANGELOG.adoc[Changelog]
+
+== Documentation Standards
+
+=== File Formats
+
+* **AsciiDoc (`.adoc`)**: Complex documentation, preferred format
+* **Markdown (`.md`)**: Simple docs, GitHub compatibility
+
+=== SPDX Headers
+
+All documentation files must include:
+
+[source,asciidoc]
+----
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
+----
+
+=== Document Structure
+
+1. **Title** (level 1 heading)
+2. **Brief description**
+3. **Table of contents** (for long docs)
+4. **Content sections**
+5. **Links to related docs**
+6. **Last updated date**
+
+== Contributing to Documentation
+
+Documentation improvements are always welcome! See link:governance/CONTRIBUTING.adoc[Contributing Guide] for:
+
+* Style guidelines
+* Review process
+* Documentation testing
+
+## External Resources
+
+* **Project Repository**: https://github.com/hyperpolymath/excel-economic-numbers-tool
+* **Issue Tracker**: https://github.com/hyperpolymath/excel-economic-numbers-tool/issues
+* **Discussions**: https://github.com/hyperpolymath/excel-economic-numbers-tool/discussions
+
+---
+
+**Last updated:** 2026-01-23
