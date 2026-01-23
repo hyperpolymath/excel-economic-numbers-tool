@@ -1,0 +1,31 @@
+Package: economic.toolkit
+Type: Package
+Title: Economic Data Analysis Toolkit
+Version: 2.1.0
+Date: 2026-01-23
+Authors@R: c(
+    person("Hyperpolymath Contributors", role = c("aut", "cre"),
+           email = "noreply@hyperpolymath.org"))
+Description: Cross-platform economic data analysis toolkit providing access to
+    10+ economic data sources (FRED, World Bank, IMF, OECD, ECB, BEA, Census,
+    Eurostat, BIS, DBnomics) and economic analysis functions. Can connect to
+    Julia backend via JuliaCall or use REST API mode.
+License: PMPL-1.0-or-later
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 4.0.0)
+Imports:
+    httr,
+    jsonlite,
+    JuliaCall
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    ggplot2,
+    dplyr
+VignetteBuilder: knitr
+RoxygenNote: 7.2.3
+URL: https://github.com/hyperpolymath/excel-economic-numbers-tool
+BugReports: https://github.com/hyperpolymath/excel-economic-numbers-tool/issues
