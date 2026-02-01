@@ -6,7 +6,7 @@
 image:https://img.shields.io/github/workflow/status/hyperpolymath/excel-economic-numbers-tool/CI[Build Status,link=https://github.com/hyperpolymath/excel-economic-numbers-tool/actions]
 image:https://img.shields.io/codecov/c/github/hyperpolymath/excel-economic-numbers-tool[Coverage,link=https://codecov.io/gh/hyperpolymath/excel-economic-numbers-tool]
 image:https://img.shields.io/npm/v/economic-toolkit-v2[Version,link=https://www.npmjs.com/package/economic-toolkit-v2]
-image:https://img.shields.io/badge/license-PMPL--1.0--or--later-blue.svg[License,link=LICENSE]
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 image:https://img.shields.io/badge/RSR-89%25%20Bronze-cd7f32[RSR Compliance,link=docs/standards/RSR.md]
 image:https://img.shields.io/badge/TPCF-Perimeter%203-green[TPCF,link=docs/governance/TPCF.md]
 
