@@ -1,0 +1,158 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/office-js/custom-functions.schema.json",
+  "functions": [
+    {
+      "id": "FRED",
+      "name": "FRED",
+      "description": "Fetches economic data from FRED (Federal Reserve Economic Data)",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "seriesId",
+          "description": "FRED series identifier (e.g., GDPC1)",
+          "type": "string"
+        },
+        {
+          "name": "startDate",
+          "description": "Start date (optional, YYYY-MM-DD)",
+          "type": "string",
+          "optional": true
+        },
+        {
+          "name": "endDate",
+          "description": "End date (optional, YYYY-MM-DD)",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "WORLDBANK",
+      "name": "WORLDBANK",
+      "description": "Fetches economic data from World Bank",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "indicator",
+          "description": "World Bank indicator code",
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "description": "Country code (e.g., USA, GBR)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "id": "IMF",
+      "name": "IMF",
+      "description": "Fetches economic data from IMF World Economic Outlook",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "indicator",
+          "description": "IMF WEO indicator code",
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "description": "Country code",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "id": "OECD",
+      "name": "OECD",
+      "description": "Fetches economic data from OECD",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "datasetId",
+          "description": "OECD dataset identifier",
+          "type": "string"
+        },
+        {
+          "name": "filter",
+          "description": "SDMX filter expression",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "ECB",
+      "name": "ECB",
+      "description": "Fetches economic data from European Central Bank",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "seriesKey",
+          "description": "ECB series key (SDMX format)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "id": "EUROSTAT",
+      "name": "EUROSTAT",
+      "description": "Fetches economic data from Eurostat",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "datasetCode",
+          "description": "Eurostat dataset code",
+          "type": "string"
+        },
+        {
+          "name": "filter",
+          "description": "SDMX filter (optional)",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "BIS",
+      "name": "BIS",
+      "description": "Fetches economic data from Bank for International Settlements",
+      "helpUrl": "https://github.com/hyperpolymath/excel-economic-numbers-tool",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "seriesId",
+          "description": "BIS series identifier (DATASET:FREQ:SERIES)",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

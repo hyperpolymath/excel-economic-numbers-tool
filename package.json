@@ -1,5 +1,5 @@
 {
-  "name": "economic-toolkit-v2",
+  "name": "economic-toolkit",
   "version": "2.0.0",
   "description": "Cross-platform Excel/LibreOffice add-in for economic modelling and investigative research",
   "main": "dist/index.js",

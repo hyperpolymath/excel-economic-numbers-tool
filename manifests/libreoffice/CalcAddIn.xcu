@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors -->
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    oor:name="CalcAddIns"
+                    oor:package="org.openoffice.Office">
+
+  <node oor:name="AddInInfo">
+    <node oor:name="org.hyperpolymath.EconomicToolkit" oor:op="replace">
+      <node oor:name="AddInFunctions">
+
+        <!-- FRED Function -->
+        <node oor:name="ECON_FRED" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.FRED</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches economic data from FRED (Federal Reserve Economic Data)</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+          <prop oor:name="CompatibilityName">
+            <value xml:lang="en">ECON.FRED</value>
+          </prop>
+          <node oor:name="Parameters">
+            <node oor:name="seriesId" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">Series ID</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">FRED series identifier (e.g., GDPC1)</value>
+              </prop>
+            </node>
+          </node>
+        </node>
+
+        <!-- World Bank Function -->
+        <node oor:name="ECON_WORLDBANK" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.WORLDBANK</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches economic data from World Bank</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+          <prop oor:name="CompatibilityName">
+            <value xml:lang="en">ECON.WORLDBANK</value>
+          </prop>
+        </node>
+
+        <!-- IMF Function -->
+        <node oor:name="ECON_IMF" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.IMF</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches data from IMF World Economic Outlook</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+        </node>
+
+        <!-- OECD Function -->
+        <node oor:name="ECON_OECD" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.OECD</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches economic data from OECD</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+        </node>
+
+        <!-- ECB Function -->
+        <node oor:name="ECON_ECB" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.ECB</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches data from European Central Bank</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+        </node>
+
+        <!-- Eurostat Function -->
+        <node oor:name="ECON_EUROSTAT" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.EUROSTAT</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches economic data from Eurostat</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+        </node>
+
+        <!-- BIS Function -->
+        <node oor:name="ECON_BIS" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">ECON.BIS</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fetches data from Bank for International Settlements</value>
+          </prop>
+          <prop oor:name="Category">
+            <value xml:lang="en">Add-In</value>
+          </prop>
+        </node>
+
+      </node>
+    </node>
+  </node>
+</oor:component-data>

@@ -2,17 +2,17 @@
  * Constraint Editor Task Pane
  *
  * Provides a visual interface for defining and managing economic constraints
- * in the constraint propagation system. Allows users to:
+ * in the constraintDef propagation system. Allows users to:
  * - Define accounting identities (e.g., C + I + G + NX = GDP)
  * - Set variable bounds and fixed values
- * - Solve constraint systems
- * - Visualize constraint relationships
+ * - Solve constraintDef systems
+ * - Visualize constraintDef relationships
  */
 
 // Constraint types
 type constraintType =
   | Identity // Accounting identity (must hold exactly)
-  | Inequality // Bounds constraint (<=, >=, <, >)
+  | Inequality // Bounds constraintDef (<=, >=, <, >)
   | Fixed // Variable is fixed to a value
 
 type operator =
@@ -31,7 +31,7 @@ type variable = {
   upperBound: option<float>,
 }
 
-type constraint = {
+type constraintDef = {
   id: string,
   name: string,
   constraintType: constraintType,
@@ -43,7 +43,7 @@ type constraint = {
 }
 
 type state = {
-  constraints: array<constraint>,
+  constraints: array<constraintDef>,
   variables: Map.t<string, variable>,
   selectedConstraint: option<string>,
   isSolving: bool,
@@ -52,8 +52,8 @@ type state = {
 }
 
 type action =
-  | AddConstraint(constraint)
-  | UpdateConstraint(string, constraint)
+  | AddConstraint(constraintDef)
+  | UpdateConstraint(string, constraintDef)
   | DeleteConstraint(string)
   | ToggleConstraint(string)
   | SelectConstraint(option<string>)
@@ -138,7 +138,7 @@ let initialState: state = {
 }
 
 // API calls to Julia backend
-let solveConstraintSystem = async (constraints: array<constraint>, variables: Map.t<string, variable>) => {
+let solveConstraintSystem = async (constraints: array<constraintDef>, variables: Map.t<string, variable>) => {
   let url = "http://localhost:8080/api/v1/constraints/solve"
 
   let payload = {
@@ -170,15 +170,15 @@ let solveConstraintSystem = async (constraints: array<constraint>, variables: Ma
     let json = await Fetch.Response.json(response)
     Ok(json)
   } else {
-    Error("Failed to solve constraint system: " ++ response.statusText)
+    Error("Failed to solve constraintDef system: " ++ response.statusText)
   }
 }
 
 // Components
 module ConstraintList = {
   @react.component
-  let make = (~constraints: array<constraint>, ~selectedId: option<string>, ~onSelect, ~onToggle, ~onDelete) => {
-    <div className="constraint-list">
+  let make = (~constraints: array<constraintDef>, ~selectedId: option<string>, ~onSelect, ~onToggle, ~onDelete) => {
+    <div className="constraintDef-list">
       <h3> {React.string("Constraints")} </h3>
       {Belt.Array.length(constraints) === 0
         ? <p className="empty-state"> {React.string("No constraints defined. Click 'Add Constraint' to get started.")} </p>
@@ -188,14 +188,14 @@ module ConstraintList = {
                 key={c.id}
                 className={selectedId === Some(c.id) ? "selected" : ""}
                 onClick={_ => onSelect(Some(c.id))}>
-                <div className="constraint-item">
+                <div className="constraintDef-item">
                   <input
                     type_="checkbox"
                     checked={c.isActive}
                     onChange={_ => onToggle(c.id)}
                   />
-                  <span className="constraint-name"> {React.string(c.name)} </span>
-                  <code className="constraint-equation"> {React.string(c.equation)} </code>
+                  <span className="constraintDef-name"> {React.string(c.name)} </span>
+                  <code className="constraintDef-equation"> {React.string(c.equation)} </code>
                   <button onClick={_ => onDelete(c.id)} className="delete-btn">
                     {React.string("×")}
                   </button>
@@ -209,14 +209,14 @@ module ConstraintList = {
 
 module ConstraintForm = {
   @react.component
-  let make = (~constraint: option<constraint>, ~onSave, ~onCancel) => {
-    let (name, setName) = React.useState(() => constraint->Belt.Option.mapWithDefault("", c => c.name))
-    let (equation, setEquation) = React.useState(() => constraint->Belt.Option.mapWithDefault("", c => c.equation))
+  let make = (~constraintDef: option<constraintDef>, ~onSave, ~onCancel) => {
+    let (name, setName) = React.useState(() => constraintDef->Belt.Option.mapWithDefault("", c => c.name))
+    let (equation, setEquation) = React.useState(() => constraintDef->Belt.Option.mapWithDefault("", c => c.equation))
 
     let handleSubmit = e => {
       ReactEvent.Form.preventDefault(e)
-      let newConstraint: constraint = {
-        id: constraint->Belt.Option.mapWithDefault(
+      let newConstraint: constraintDef = {
+        id: constraintDef->Belt.Option.mapWithDefault(
           "c_" ++ Js.Date.now()->Belt.Float.toString,
           c => c.id,
         ),
@@ -231,7 +231,7 @@ module ConstraintForm = {
       onSave(newConstraint)
     }
 
-    <form onSubmit={handleSubmit} className="constraint-form">
+    <form onSubmit={handleSubmit} className="constraintDef-form">
       <div className="form-group">
         <label> {React.string("Constraint Name")} </label>
         <input
@@ -315,7 +315,7 @@ let make = () => {
     }
   }
 
-  <div className="constraint-editor">
+  <div className="constraintDef-editor">
     <div className="header">
       <h2> {React.string("Constraint Editor")} </h2>
       <button onClick={_ => setShowForm(_ => true)} className="btn-primary">
@@ -325,7 +325,7 @@ let make = () => {
 
     {showForm
       ? <ConstraintForm
-          constraint={None}
+          constraintDef={None}
           onSave={c => {
             dispatch(AddConstraint(c))
             setShowForm(_ => false)

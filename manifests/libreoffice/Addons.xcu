@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors -->
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    oor:name="Addons"
+                    oor:package="org.openoffice.Office">
+
+  <node oor:name="AddonUI">
+    <node oor:name="OfficeToolBar">
+      <node oor:name="org.hyperpolymath.economic-toolkit" oor:op="replace">
+        <node oor:name="m1" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:uno-bridge.js$UNO_showNotification?language=JavaScript&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en">Economic Data</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.sheet.SpreadsheetDocument</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+
+    <node oor:name="OfficeMenuBar">
+      <node oor:name="org.hyperpolymath.economic-toolkit" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en">Economic Data</value>
+        </prop>
+        <prop oor:name="Target" oor:type="xs:string">
+          <value>_self</value>
+        </prop>
+        <prop oor:name="Context" oor:type="xs:string">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <node oor:name="Submenu">
+          <node oor:name="m1" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string">
+              <value>vnd.sun.star.script:uno-bridge.js$UNO_showNotification?language=JavaScript&amp;location=share</value>
+            </prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="en">Fetch Data...</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string">
+              <value>_self</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

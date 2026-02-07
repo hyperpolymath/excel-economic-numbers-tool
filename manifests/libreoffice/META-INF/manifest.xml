@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors -->
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=JavaScript"
+                       manifest:full-path="uno-bridge.js" />
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="Addons.xcu" />
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="CalcAddIn.xcu" />
+</manifest:manifest>
