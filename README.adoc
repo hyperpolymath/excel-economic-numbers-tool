@@ -272,3 +272,8 @@ Key provisions:
 ---
 
 **Last updated:** 2026-01-23
+
+
+== Architecture
+
+See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
