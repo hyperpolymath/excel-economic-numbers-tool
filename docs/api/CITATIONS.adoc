@@ -6,29 +6,29 @@
 [source,bibtex]
 ----
 @software{excel-economic-numbers-tool_2025,
-  author = {Polymath, Hyper},
+  author = {Jewell, Jonathan D.A.},
   title = {Excel-Economic-Numbers-Tool},
   year = {2025},
   url = {https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool},
-  license = {AGPL-3.0-or-later}
+  license = {PMPL-1.0-or-later}
 }
 ----
 
 == Harvard Style
 
-Polymath, H. (2025) _Excel-Economic-Numbers-Tool_ [Computer software]. Available at: https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool
+Jewell, J.D.A. (2025) _Excel-Economic-Numbers-Tool_ [Computer software]. Available at: https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool
 
 == OSCOLA
 
-Hyper Polymath, 'Excel-Economic-Numbers-Tool' (2025) <https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool>
+Jonathan D.A. Jewell, 'Excel-Economic-Numbers-Tool' (2025) <https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool>
 
 == MLA
 
-Polymath, Hyper. "Excel-Economic-Numbers-Tool." 2025, github.com/hyperpolymath/Excel-Economic-Numbers-Tool.
+Jewell, Jonathan D.A.. "Excel-Economic-Numbers-Tool." 2025, github.com/hyperpolymath/Excel-Economic-Numbers-Tool.
 
 == APA 7
 
-Polymath, H. (2025). _Excel-Economic-Numbers-Tool_ [Computer software]. GitHub. https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool
+Jewell, J.D.A. (2025). _Excel-Economic-Numbers-Tool_ [Computer software]. GitHub. https://github.com/hyperpolymath/Excel-Economic-Numbers-Tool
 
 == See Also
 

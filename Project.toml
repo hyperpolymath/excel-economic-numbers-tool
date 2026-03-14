@@ -2,7 +2,7 @@
 
 name = "EconomicToolkit"
 uuid = "7c9e1234-5678-90ab-cdef-123456789abc"
-authors = ["Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"]
+authors = ["Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"]
 version = "10.0.0"
 
 [deps]
