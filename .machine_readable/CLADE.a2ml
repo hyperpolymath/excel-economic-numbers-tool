@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "5ad0e827-5c87-5a60-85d7-32884b0fcb80"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "excel-economic-numbers-tool"
+prefixed-name = "ap-excel-economic-numbers-tool"
+
+[clade]
+primary = "ap"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/excel-economic-numbers-tool"
+gitlab = "hyperpolymath/excel-economic-numbers-tool"
+bitbucket = "hyperpolymath/excel-economic-numbers-tool"
+
+[lineage]
+type = "standalone"
+parent = "Economic data analysis in Excel"
+born = "2026-03-16"
