@@ -52,7 +52,7 @@ jobs:
         with:
           version: ${{ env.JULIA_VERSION }}
       - name: Cache Julia packages
-        uses: actions/cache@v3
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: ~/.julia
           key: ${{ runner.os }}-julia-${{ hashFiles('**/Project.toml') }}
@@ -111,12 +111,12 @@ jobs:
       - name: Build LibreOffice extension
         run: npm run build:libre
       - name: Upload Excel add-in artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
         with:
           name: excel-addin
           path: dist/officejs/
       - name: Upload LibreOffice extension artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
         with:
           name: libreoffice-extension
           path: dist/uno/economic-toolkit.oxt
