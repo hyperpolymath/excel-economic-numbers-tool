@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642195f2b846b8bbe245a93 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642195f2b846b8bbe245a93 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -96,7 +96,7 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ env.JULIA_VERSION }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642195f2b846b8bbe245a93 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642195f2b846b8bbe245a93 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Run npm audit
