@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
 """
 FRED (Federal Reserve Economic Data) Client
 

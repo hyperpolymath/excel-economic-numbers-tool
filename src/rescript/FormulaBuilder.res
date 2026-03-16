@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
 // FormulaBuilder.res - Formula builder task pane component
 
 type formula = {

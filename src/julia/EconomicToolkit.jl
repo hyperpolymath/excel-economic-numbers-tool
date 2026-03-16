@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
 """
 Economic Toolkit v2.0 - Main Module
 

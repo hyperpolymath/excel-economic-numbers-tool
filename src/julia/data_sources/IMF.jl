@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
 """
 IMF (International Monetary Fund) Data Client
 
