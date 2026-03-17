@@ -1,0 +1,18 @@
+# ⚓ ANCHOR: excel-economic-numbers-tool
+# This is the canonical authority for the excel-economic-numbers-tool repository.
+
+id: "org.hyperpolymath.excel-economic-numbers-tool"
+version: "1.0.0"
+clade: "unknown"
+status: "active"
+
+# SSG Configuration (Unified boj-server build)
+ssg:
+  engine: "casket"
+  output_dir: "public"
+  boj_trigger: true
+  cartridge: "ssg-mcp"
+
+# Relationships
+parents:
+  - "org.hyperpolymath.boj-server"
