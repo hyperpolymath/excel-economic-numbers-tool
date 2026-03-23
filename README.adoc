@@ -182,7 +182,7 @@ See link:docs/governance/CONTRIBUTING.adoc[Contributing Guide] and link:docs/gov
 
 * [ ] Google Sheets support
 * [ ] Web application (standalone)
-* [ ] Mobile apps (Tauri 2.0)
+* [ ] Mobile apps (Gossamer)
 * [ ] Collaborative features
 * [ ] Cloud sync for cache
 
