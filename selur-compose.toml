@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# Stapeln selur-compose.toml — Excel Economic Numbers Tool
+# Julia + Deno REST API server on port 8080
+
+[project]
+name = "excel-economic-numbers-tool"
+
+[services.app]
+build = { context = ".", dockerfile = "Containerfile" }
+restart = "unless-stopped"
+networks = ["default"]
+ports = ["8080:8080"]
+
+healthcheck = { test = "curl -f http://localhost:8080/health || exit 1", interval = "30s", timeout = "3s", start_period = "5s", retries = 3 }
+
+[services.app.labels]
+"org.opencontainers.image.title" = "Economic Toolkit REST API"
+
+[networks.default]
+driver = "bridge"
