@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# stapeln.toml — Layer-based container build for excel-economic-numbers-tool
+#
+# stapeln builds containers as composable layers (German: "to stack").
+# Each layer is independently cacheable, verifiable, and signable.
+
+[metadata]
+name = "excel-economic-numbers-tool"
+version = "0.1.0"
+description = "excel-economic-numbers-tool container service"
+author = "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
+license = "PMPL-1.0-or-later"
+registry = "ghcr.io/hyperpolymath"
+
+[build]
+containerfile = "Containerfile"
+context = "."
+runtime = "podman"
+
+# ── Layer Definitions ──────────────────────────────────────────
+
+[layers.base]
+description = "Chainguard Wolfi minimal base"
+from = "cgr.dev/chainguard/wolfi-base:latest"
+cache = true
+verify = true
+
+[layers.toolchain]
+description = "Build tools"
+extends = "base"
+packages = []
+cache = true
+
+[layers.build]
+description = "excel-economic-numbers-tool build"
+extends = "toolchain"
+commands = ["apt-get update && apt-get install -y \", "julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'", "apt-get update && apt-get install -y \"]
+
+[layers.runtime]
+description = "Minimal runtime"
+from = "cgr.dev/chainguard/wolfi-base:latest"
+packages = ["ca-certificates", "curl"]
+copy-from = [
+    { layer = "build", src = "/app/", dst = "/app/" },
+]
+entrypoint = ["["julia", "--project=.", "src/julia/EconomicToolkit.jl", "--dev"]"]
+user = "excel-economic-numbers-tool"
+expose = [8080]
+
+# ── Security ───────────────────────────────────────────────────
+
+[security]
+non-root = true
+read-only-root = false
+no-new-privileges = true
+cap-drop = ["ALL"]
+seccomp-profile = "default"
+
+[security.signing]
+algorithm = "ML-DSA-87"
+provider = "cerro-torre"
+
+[security.sbom]
+format = "spdx-json"
+output = "sbom.spdx.json"
+include-deps = true
+
+# ── Verification ───────────────────────────────────────────────
+
+[verify]
+vordr = true
+svalinn = true
+scan-on-build = true
+fail-on = ["critical", "high"]
+
+# ── Targets ────────────────────────────────────────────────────
+
+[targets.development]
+layers = ["base", "julia-toolchain", "build"]
+env = { LOG_LEVEL = "debug" }
+
+[targets.production]
+layers = ["runtime"]
+env = { LOG_LEVEL = "info" }
+
+[targets.test]
+layers = ["base", "julia-toolchain", "build"]
+env = { LOG_LEVEL = "debug" }
