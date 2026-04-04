@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# eclexiaiser manifest for excel-economic-numbers-tool
+
+[project]
+name = "excel-economic-numbers-tool"
+
+[[functions]]
+name = "main"
+source = "src/main.rs"
+energy-budget-mj = 18.0
+
+[carbon]
+provider = "static"
+region = "GB"
+static-intensity = 200.0
+
+[report]
+format = "text"
+include-recommendations = true
