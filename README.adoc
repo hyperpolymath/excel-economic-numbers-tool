@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
 
 = Excel Economic Toolkit
@@ -252,7 +252,7 @@ See link:docs/governance/CONTRIBUTING.adoc[Contributing Guide] and link:docs/gov
 
 == License
 
-This project is licensed under the **PMPL-1.0-or-later** (Palimpsest-MPL License v1.0 or later).
+This project is licensed under the **MPL-2.0** (Palimpsest-MPL License v1.0 or later).
 
 See link:LICENSE[LICENSE] for full text and link:https://github.com/hyperpolymath/palimpsest-license[palimpsest-license repo] for specifications.
 

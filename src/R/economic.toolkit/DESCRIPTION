@@ -10,7 +10,7 @@ Description: Cross-platform economic data analysis toolkit providing access to
     10+ economic data sources (FRED, World Bank, IMF, OECD, ECB, BEA, Census,
     Eurostat, BIS, DBnomics) and economic analysis functions. Can connect to
     Julia backend via JuliaCall or use REST API mode.
-License: PMPL-1.0-or-later
+License: MPL-2.0
 Encoding: UTF-8
 LazyData: true
 Depends:

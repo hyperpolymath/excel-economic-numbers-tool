@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
 
 """
@@ -15,7 +15,7 @@ using Dates
 
 const VERSION = "2.1.0"
 const AUTHOR = "Hyperpolymath Contributors"
-const LICENSE = "PMPL-1.0-or-later"
+const LICENSE = "MPL-2.0"
 
 include("client.jl")
 include("data_sources.jl")

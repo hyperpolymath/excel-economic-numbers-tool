@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 /**
  * Custom Data Source Builder - v3.0
  *
@@ -108,7 +108,7 @@ let buildDataSource = (config: dataSourceConfig): result<string, string> => {
   | Valid => {
       // Generate Julia code for the custom data source
       let juliaCode = `
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # Generated Data Source: ${config.name}
 
 module ${config.id}DataSource

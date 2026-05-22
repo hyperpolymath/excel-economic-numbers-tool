@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 """
 WebSocket server for real-time collaboration features (v2.2 + v8.0).
 

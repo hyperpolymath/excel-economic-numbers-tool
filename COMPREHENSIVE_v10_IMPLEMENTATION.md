@@ -153,7 +153,7 @@ excel-economic-numbers-tool/
    - Early bird registration
 
 ## License
-PMPL-1.0-or-later (Palimpsest-MPL License)
+MPL-2.0 (Palimpsest-MPL License)
 
 ## Contributors
 Hyperpolymath Contributors + Community

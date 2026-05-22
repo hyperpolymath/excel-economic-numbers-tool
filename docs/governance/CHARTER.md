@@ -244,7 +244,7 @@ The Economic Toolkit project aims to democratize access to economic data and adv
 
 **Copyright**:
 - Contributors retain copyright
-- Code licensed under PMPL-1.0-or-later
+- Code licensed under MPL-2.0
 - Documentation licensed under CC-BY-4.0
 
 **Patents**:

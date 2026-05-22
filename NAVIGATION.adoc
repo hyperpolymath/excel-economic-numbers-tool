@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
 
 = Repository Navigation Guide
@@ -12,7 +12,7 @@ This guide helps you navigate the excel-economic-numbers-tool repository structu
 |File/Directory |Purpose
 
 |**README.adoc** |Project overview, installation, quick start
-|**LICENSE** |PMPL-1.0-or-later license text
+|**LICENSE** |MPL-2.0 license text
 |**VERSION** |Current version number
 |**package.json** |Deno/ReScript package configuration
 |===

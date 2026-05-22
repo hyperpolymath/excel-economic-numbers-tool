@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
 
 [build-system]
@@ -10,7 +10,7 @@ name = "economic-toolkit"
 version = "2.1.0"
 description = "Cross-platform economic data analysis toolkit with Python API"
 readme = "README.adoc"
-license = {text = "PMPL-1.0-or-later"}
+license = {text = "MPL-2.0"}
 authors = [
     {name = "Hyperpolymath Contributors", email = "noreply@hyperpolymath.org"}
 ]

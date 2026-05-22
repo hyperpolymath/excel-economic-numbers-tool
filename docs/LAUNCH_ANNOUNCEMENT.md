@@ -82,7 +82,7 @@ Economic Toolkit is now a mature, community-governed platform:
 
 ### Get Started Today
 
-**Free & Open Source** (PMPL-1.0-or-later license)
+**Free & Open Source** (MPL-2.0 license)
 
 ```bash
 # Python
@@ -132,4 +132,4 @@ Hyperpolymath is an open-source community building tools for researchers, analys
 
 ---
 
-*This announcement is distributed under the PMPL-1.0-or-later license.*
+*This announcement is distributed under the MPL-2.0 license.*

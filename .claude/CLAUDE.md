@@ -54,7 +54,7 @@ The following files in `.machine_readable/` contain structured project metadata:
 
 **No exceptions for Kotlin/Swift** - use Rust-first approach:
 
-1. **Gossamer** - Web UI (ReScript) + Ephapax/Zig backend, PMPL-1.0-or-later (own stack)
+1. **Gossamer** - Web UI (ReScript) + Ephapax/Zig backend, MPL-2.0 (own stack)
 2. **Dioxus** - Pure Rust native UI, MIT/Apache-2.0
 
 Both are FOSS with independent governance (no Big Tech). Gossamer is hyperpolymath's own webview shell with linear type safety.

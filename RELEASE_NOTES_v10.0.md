@@ -112,7 +112,7 @@ We welcome contributions! See [CONTRIBUTING.adoc](docs/governance/CONTRIBUTING.a
 
 - **Governance**: TPCF Perimeter 3 (Community Sandbox)
 - **Standards**: RSR 89% Bronze compliance
-- **License**: PMPL-1.0-or-later (Palimpsest-MPL)
+- **License**: MPL-2.0 (Palimpsest-MPL)
 
 ## 📚 Documentation
 

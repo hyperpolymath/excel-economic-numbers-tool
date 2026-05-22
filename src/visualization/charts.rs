@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! Interactive Charting Engine - v7.0
 //!
 //! High-performance charting using Rust/WASM for 60fps interactive visualizations
