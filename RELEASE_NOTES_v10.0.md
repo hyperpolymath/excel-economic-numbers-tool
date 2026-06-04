@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Excel Economic Toolkit v10.0.0 Release Notes
 
 **Release Date:** 2026-01-23  
@@ -112,7 +116,7 @@ We welcome contributions! See [CONTRIBUTING.adoc](docs/governance/CONTRIBUTING.a
 
 - **Governance**: TPCF Perimeter 3 (Community Sandbox)
 - **Standards**: RSR 89% Bronze compliance
-- **License**: MPL-2.0 (Palimpsest-MPL)
+- **License**: MPL-2.0 (MPL-2.0)
 
 ## 📚 Documentation
 

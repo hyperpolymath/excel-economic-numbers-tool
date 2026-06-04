@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Implementation Progress Report
 **Date:** 2026-02-07
 **Target:** Bring Excel Economic Toolkit from 40% → 100% completion
