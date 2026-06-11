@@ -1,9 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 permissions:
   contents: read
-
 name: CI/CD Pipeline
-
 on:
   push:
     branches: [main, develop]
@@ -11,11 +9,9 @@ on:
     branches: [main, develop]
   release:
     types: [published]
-
 env:
   JULIA_VERSION: '1.10'
   NODE_VERSION: '20'
-
 jobs:
   lint-julia:
     runs-on: ubuntu-latest
@@ -30,7 +26,6 @@ jobs:
       - name: Check Julia formatting
         run: |
           julia -e 'using JuliaFormatter; format("src/julia", verbose=true, overwrite=false) || exit(1)'
-
   lint-typescript:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -46,7 +41,6 @@ jobs:
         run: npm run lint
       - name: Check Prettier formatting
         run: npx prettier --check "src/**/*.{ts,tsx,js,jsx}"
-
   test-julia:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -73,7 +67,6 @@ jobs:
         with:
           files: lcov.info
           flags: julia
-
   test-typescript:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -92,7 +85,6 @@ jobs:
         with:
           files: ./coverage/cobertura-coverage.xml
           flags: typescript
-
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -126,7 +118,6 @@ jobs:
         with:
           name: libreoffice-extension
           path: dist/uno/economic-toolkit.oxt
-
   security:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -142,7 +133,6 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
   docker-build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -179,7 +169,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -209,7 +198,6 @@ jobs:
             dist/uno/economic-toolkit.oxt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   coverage-report:
     runs-on: ubuntu-latest
     timeout-minutes: 15

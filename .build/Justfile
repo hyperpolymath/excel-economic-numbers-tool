@@ -39,3 +39,6 @@ test:
 # All checks before commit
 pre-commit: build test
     @echo "All checks passed!"
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true
