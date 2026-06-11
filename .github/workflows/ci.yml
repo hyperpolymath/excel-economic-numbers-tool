@@ -1,9 +1,8 @@
+# // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # SPDX-License-Identifier: MPL-2.0
 permissions:
   contents: read
-
 name: CI/CD Pipeline
-
 on:
   push:
     branches: [main, develop]
@@ -11,14 +10,13 @@ on:
     branches: [main, develop]
   release:
     types: [published]
-
 env:
   JULIA_VERSION: '1.10'
   NODE_VERSION: '20'
-
 jobs:
   lint-julia:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: julia-actions/setup-julia@ac0d62164df5a47de404f4e96ce86a1a28a28d56 # v1
@@ -29,9 +27,9 @@ jobs:
       - name: Check Julia formatting
         run: |
           julia -e 'using JuliaFormatter; format("src/julia", verbose=true, overwrite=false) || exit(1)'
-
   lint-typescript:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -44,9 +42,9 @@ jobs:
         run: npm run lint
       - name: Check Prettier formatting
         run: npx prettier --check "src/**/*.{ts,tsx,js,jsx}"
-
   test-julia:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: julia-actions/setup-julia@ac0d62164df5a47de404f4e96ce86a1a28a28d56 # v1
@@ -70,9 +68,9 @@ jobs:
         with:
           files: lcov.info
           flags: julia
-
   test-typescript:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -88,9 +86,9 @@ jobs:
         with:
           files: ./coverage/cobertura-coverage.xml
           flags: typescript
-
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [lint-julia, lint-typescript, test-julia, test-typescript]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -121,9 +119,9 @@ jobs:
         with:
           name: libreoffice-extension
           path: dist/uno/economic-toolkit.oxt
-
   security:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -136,9 +134,9 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
   docker-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [build]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     steps:
@@ -172,9 +170,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [build, security]
     if: github.event_name == 'release'
     steps:
@@ -201,9 +199,9 @@ jobs:
             dist/uno/economic-toolkit.oxt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   coverage-report:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [test-julia, test-typescript]
     steps:
       - name: Coverage summary

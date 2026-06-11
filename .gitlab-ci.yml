@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # GitLab CI/CD Pipeline for Economic Toolkit v2.0
 # 6 stages: lint, test, build, security, deploy, release
 
@@ -8,21 +10,17 @@ stages:
   - security
   - deploy
   - release
-
 variables:
   JULIA_VERSION: "1.10"
   NODE_VERSION: "20"
   PODMAN_VERSION: "4.0"
-
 # Cache dependencies
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
     - .julia/
-
 # ===== LINT STAGE =====
-
 lint:julia:
   stage: lint
   image: julia:${JULIA_VERSION}
@@ -33,7 +31,6 @@ lint:julia:
     - merge_requests
     - main
     - develop
-
 lint:typescript:
   stage: lint
   image: node:${NODE_VERSION}
@@ -44,7 +41,6 @@ lint:typescript:
     - merge_requests
     - main
     - develop
-
 lint:prettier:
   stage: lint
   image: node:${NODE_VERSION}
@@ -55,9 +51,7 @@ lint:prettier:
     - merge_requests
     - main
     - develop
-
 # ===== TEST STAGE =====
-
 test:julia:
   stage: test
   image: julia:${JULIA_VERSION}
@@ -74,7 +68,6 @@ test:julia:
     - merge_requests
     - main
     - develop
-
 test:typescript:
   stage: test
   image: node:${NODE_VERSION}
@@ -92,7 +85,6 @@ test:typescript:
     - merge_requests
     - main
     - develop
-
 test:integration:
   stage: test
   image: node:${NODE_VERSION}
@@ -102,15 +94,13 @@ test:integration:
     - npm ci
     - julia --project=. -e 'using Pkg; Pkg.instantiate()'
     - julia --project=. src/julia/EconomicToolkit.jl --dev &
-    - sleep 10  # Wait for server to start
+    - sleep 10 # Wait for server to start
     - npm run test:integration
   only:
     - merge_requests
     - main
     - develop
-
 # ===== BUILD STAGE =====
-
 build:typescript:
   stage: build
   image: node:${NODE_VERSION}
@@ -125,7 +115,6 @@ build:typescript:
     - main
     - develop
     - tags
-
 build:julia:
   stage: build
   image: julia:${JULIA_VERSION}
@@ -140,7 +129,6 @@ build:julia:
     - main
     - develop
     - tags
-
 build:excel:
   stage: build
   image: node:${NODE_VERSION}
@@ -157,7 +145,6 @@ build:excel:
     - main
     - develop
     - tags
-
 build:libreoffice:
   stage: build
   image: node:${NODE_VERSION}
@@ -174,7 +161,6 @@ build:libreoffice:
     - main
     - develop
     - tags
-
 build:container:
   stage: build
   image: quay.io/podman/stable
@@ -189,9 +175,7 @@ build:container:
     - main
     - develop
     - tags
-
 # ===== SECURITY STAGE =====
-
 security:dependency-scan:
   stage: security
   image: node:${NODE_VERSION}
@@ -202,7 +186,6 @@ security:dependency-scan:
   only:
     - merge_requests
     - main
-
 security:sast:
   stage: security
   image: returntocorp/semgrep
@@ -212,7 +195,6 @@ security:sast:
   only:
     - merge_requests
     - main
-
 security:container-scan:
   stage: security
   image: aquasec/trivy:latest
@@ -223,9 +205,7 @@ security:container-scan:
   only:
     - main
     - tags
-
 # ===== DEPLOY STAGE =====
-
 deploy:registry:
   stage: deploy
   image: quay.io/podman/stable
@@ -240,7 +220,6 @@ deploy:registry:
   only:
     - main
     - tags
-
 deploy:docs:
   stage: deploy
   image: julia:${JULIA_VERSION}
@@ -251,9 +230,7 @@ deploy:docs:
       - docs/build/
   only:
     - main
-
 # ===== RELEASE STAGE =====
-
 release:gitlab:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
@@ -276,9 +253,7 @@ release:gitlab:
           url: 'registry.gitlab.com/hyperpolymath/economic-toolkit:${CI_COMMIT_TAG}'
   only:
     - tags
-
 # ===== QUALITY GATES =====
-
 coverage:check:
   stage: test
   image: alpine:latest
@@ -292,3 +267,8 @@ coverage:check:
   only:
     - merge_requests
     - main
+trufflehog:
+  stage: security
+  image: trufflesecurity/trufflehog:latest
+  script:
+    - trufflehog git file://. --only-verified --fail

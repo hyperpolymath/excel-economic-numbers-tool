@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Economic Toolkit Certified Analyst (ETCA) Program - v10.0
 
 **Program Launch**: Q1 2026

@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Excel Economic Numbers Tool - v10.0 Implementation Summary
 
 ## Overview
@@ -153,7 +157,7 @@ excel-economic-numbers-tool/
    - Early bird registration
 
 ## License
-MPL-2.0 (Palimpsest-MPL License)
+MPL-2.0 (MPL-2.0 License)
 
 ## Contributors
 Hyperpolymath Contributors + Community

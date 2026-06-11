@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Getting Started with Economic Toolkit v10.0
 
 Welcome! This guide will help you get up and running with Economic Toolkit in under 10 minutes.

@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 ## Machine-Readable Artefacts
 
 The following files in `.machine_readable/` contain structured project metadata:
@@ -19,14 +23,14 @@ The following files in `.machine_readable/` contain structured project metadata:
 
 | Language/Tool | Use Case | Notes |
 |---------------|----------|-------|
-| **ReScript** | Primary application code | Compiles to JS, type-safe |
+| **AffineScript** | Primary application code | Compiles to JS, type-safe |
 | **Deno** | Runtime & package management | Replaces Node/npm/bun |
 | **Rust** | Performance-critical, systems, WASM | Preferred for CLI tools |
 | **Gossamer** | Desktop & mobile apps | Ephapax backend + web UI, linear type safety |
 | **Dioxus** | Mobile apps (native UI) | Pure Rust, React-like |
 | **Gleam** | Backend services | Runs on BEAM or compiles to JS |
 | **Bash/POSIX Shell** | Scripts, automation | Keep minimal |
-| **JavaScript** | Only where ReScript cannot | MCP protocol glue, Deno APIs |
+| **JavaScript** | Only where AffineScript cannot | MCP protocol glue, Deno APIs |
 | **Nickel** | Configuration language | For complex configs |
 | **Guile Scheme** | State/meta files | .machine_readable/6a2/STATE.a2ml, .machine_readable/6a2/META.a2ml, .machine_readable/6a2/ECOSYSTEM.a2ml |
 | **Julia** | Batch scripts, data processing | Per RSR |
@@ -37,13 +41,13 @@ The following files in `.machine_readable/` contain structured project metadata:
 
 | Banned | Replacement |
 |--------|-------------|
-| TypeScript | ReScript |
+| TypeScript | AffineScript |
 | Node.js | Deno |
 | npm | Deno |
 | Bun | Deno |
 | pnpm/yarn | Deno |
 | Go | Rust |
-| Python | Julia/Rust/ReScript |
+| Python | Julia/Rust/AffineScript |
 | Java/Kotlin | Rust/Gossamer/Dioxus |
 | Swift | Gossamer/Dioxus |
 | React Native | Gossamer/Dioxus |
@@ -54,18 +58,18 @@ The following files in `.machine_readable/` contain structured project metadata:
 
 **No exceptions for Kotlin/Swift** - use Rust-first approach:
 
-1. **Gossamer** - Web UI (ReScript) + Ephapax/Zig backend, MPL-2.0 (own stack)
+1. **Gossamer** - Web UI (AffineScript) + Ephapax/Zig backend, MPL-2.0 (own stack)
 2. **Dioxus** - Pure Rust native UI, MIT/Apache-2.0
 
 Both are FOSS with independent governance (no Big Tech). Gossamer is hyperpolymath's own webview shell with linear type safety.
 
 ### Enforcement Rules
 
-1. **No new TypeScript files** - Convert existing TS to ReScript
-2. **No package.json for runtime deps** - Use deno.json imports
+1. **No new TypeScript files** - Convert existing TS to AffineScript
+2. **No package.json - use deno.json deps** - Use deno.json imports
 3. **No node_modules in production** - Deno caches deps automatically
 4. **No Go code** - Use Rust instead
-5. **No Python anywhere** - Use Julia for data/batch, Rust for systems, ReScript for apps
+5. **No Python anywhere** - Use Julia for data/batch, Rust for systems, AffineScript for apps
 6. **No Kotlin/Swift for mobile** - Use Gossamer or Dioxus
 7. **No Tauri** - Use Gossamer (hyperpolymath's own webview shell)
 

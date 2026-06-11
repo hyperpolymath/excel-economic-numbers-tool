@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # 🚀 Excel Economic Toolkit v10.0 - Official Launch Announcement
 
 **FOR IMMEDIATE RELEASE**

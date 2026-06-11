@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Economic Toolkit Roadmap
 
 **Current Version**: v10.0.0 - Platform Maturity

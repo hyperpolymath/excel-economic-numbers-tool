@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Economic Toolkit Governance Charter - v10.0
 
 **Effective Date:** January 23, 2026
@@ -248,7 +252,7 @@ The Economic Toolkit project aims to democratize access to economic data and adv
 - Documentation licensed under CC-BY-4.0
 
 **Patents**:
-- Contributors grant patent license per PMPL-1.0
+- Contributors grant patent license per MPL-2.0
 - No patent trolling allowed
 
 **Trademarks**:
