@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # GitLab CI/CD Pipeline for Economic Toolkit v2.0
 # 6 stages: lint, test, build, security, deploy, release
 
