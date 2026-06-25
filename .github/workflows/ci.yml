@@ -139,6 +139,11 @@ jobs:
     timeout-minutes: 15
     needs: [build]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Set up Docker Buildx
@@ -161,6 +166,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
       - name: Build and push
+        id: push
         uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
         with:
           context: .
@@ -170,11 +176,21 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Attest container provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [build, security]
     if: github.event_name == 'release'
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Download Excel add-in
@@ -199,6 +215,12 @@ jobs:
             dist/uno/economic-toolkit.oxt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: |
+            economic-toolkit-excel.zip
+            dist/uno/economic-toolkit.oxt
   coverage-report:
     runs-on: ubuntu-latest
     timeout-minutes: 15
