@@ -2,6 +2,7 @@
 # // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # SPDX-License-Identifier: MPL-2.0
 permissions:
+  actions: read
   contents: read
 name: ReScript/Deno CI
 on:
