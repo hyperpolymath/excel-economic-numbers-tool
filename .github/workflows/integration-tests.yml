@@ -10,6 +10,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # Daily
 permissions:
+  actions: read
   contents: read
 jobs:
   integration-tests:
