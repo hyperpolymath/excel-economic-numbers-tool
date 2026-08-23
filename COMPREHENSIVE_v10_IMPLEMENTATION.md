@@ -18,7 +18,7 @@ This document summarizes the comprehensive implementation of all features from v
 
 ### v2.2 - Multi-Platform & Collaboration (COMPLETE)  
 ✓ Google Sheets add-on with custom functions
-✓ Standalone web application (ReScript + React)
+✓ Standalone web application (AffineScript + React)
 ✓ Mobile apps (Tauri 2.0 for iOS/Android)
 ✓ Real-time collaboration (WebSocket server, presence indicators)
 ✓ Cloud cache sync (S3-compatible storage)
@@ -83,7 +83,7 @@ This document summarizes the comprehensive implementation of all features from v
 
 ### Technology Stack
 - **Backend**: Julia 1.10+ (high-performance numerical computing)
-- **Frontend**: ReScript + React (type-safe UI)
+- **Frontend**: AffineScript + React (type-safe UI)
 - **Runtime**: Deno 2.0+ (secure JavaScript/TypeScript)
 - **Mobile**: Tauri 2.0 (cross-platform iOS/Android)
 - **Performance**: Rust/WASM (charts, compute-intensive)
@@ -106,7 +106,7 @@ FRED, World Bank, IMF, OECD, ECB, BEA, Census, Eurostat, BIS, DBnomics
 excel-economic-numbers-tool/
 ├── src/
 │   ├── julia/          # Backend (data sources, formulas, ML, server)
-│   ├── rescript/       # Frontend UI components
+│   ├── affinescript/       # Frontend UI components
 │   ├── python/         # Python API wrapper
 │   ├── R/              # R package
 │   ├── google-apps-script/  # Google Sheets add-on

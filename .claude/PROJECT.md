@@ -14,14 +14,14 @@ Modular Excel/LibreOffice Add-in for economic modelling and investigative resear
 
 1. **Cross-Platform Abstraction**: Single `ISpreadsheetAdapter` interface with platform-specific adapters
 2. **Julia Backend**: High-performance computation engine with HTTP/QUIC API
-3. **Type Safety**: TypeScript/ReScript for UI, Julia for backend
+3. **Type Safety**: TypeScript/AffineScript for UI, Julia for backend
 4. **Production-Grade Reliability**: Caching, rate limiting, exponential backoff retry
 5. **Offline Capability**: SQLite cache survives restarts
 
 ### Technology Stack
 
 - **Backend**: Julia ≥1.10 (computation, data sources)
-- **Frontend**: TypeScript/ReScript (UI components)
+- **Frontend**: TypeScript/AffineScript (UI components)
 - **Excel Integration**: Office.js API
 - **LibreOffice Integration**: UNO API (Rhino JS)
 - **Containerization**: Podman ≥4.0
@@ -62,7 +62,7 @@ economic-toolkit-v2/
 │   │   │   ├── OfficeJsAdapter.ts
 │   │   │   └── UnoAdapter.js      # Rhino JS for LibreOffice
 │   │   └── utils/
-│   └── rescript/                  # ReScript UI
+│   └── affinescript/                  # AffineScript UI
 │       ├── ribbons/               # Ribbon tabs
 │       └── taskpanes/             # Task panes
 ├── tests/
@@ -267,7 +267,7 @@ function createAdapter(): ISpreadsheetAdapter {
    - Identity enforcement (e.g., C + I + G + NX = GDP)
    - Literate programming support
 
-## ReScript UI Components
+## AffineScript UI Components
 
 ### Ribbon Tabs (5)
 
@@ -394,7 +394,7 @@ GET  /api/v1/cache/stats                # Cache statistics
 
 - **Julia**: Follow Blue style guide
 - **TypeScript**: ESLint + Prettier
-- **ReScript**: Standard ReScript formatter
+- **AffineScript**: Standard AffineScript formatter
 
 ### Testing Requirements
 

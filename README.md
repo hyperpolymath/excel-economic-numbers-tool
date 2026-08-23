@@ -30,7 +30,7 @@ for directory structure and quick links.
 
 - **Rate Limiting**: Respects API quotas
 
-- **Type-Safe**: Built with ReScript and Julia
+- **Type-Safe**: Built with AffineScript and Julia
 
 - **Production-Ready**: Comprehensive tests, error handling, logging
 
@@ -66,7 +66,7 @@ for directory structure and quick links.
 
 - Julia 1.9+
 
-- ReScript 12.0+
+- AffineScript 12.0+
 
 ## Build
 
@@ -74,8 +74,8 @@ for directory structure and quick links.
 # Install dependencies
 deno install
 
-# Build ReScript
-rescript build
+# Build AffineScript
+affinescript build
 
 # Run tests
 deno test
@@ -136,10 +136,10 @@ Configuration: [Data Sources Guide](docs/api/data_sources.md)
 
     excel-economic-numbers-tool/
     ├── src/
-    │   ├── rescript/       # ReScript application code
+    │   ├── affinescript/       # AffineScript application code
     │   └── julia/          # Julia computational backend
     ├── tests/
-    │   ├── rescript/       # ReScript tests
+    │   ├── affinescript/       # AffineScript tests
     │   └── julia/          # Julia tests
     ├── docs/               # Documentation (organized by purpose)
     │   ├── api/            # Technical documentation
@@ -164,7 +164,7 @@ instructions.
 
 Per [Hyperpolymath Standard](.claude/PROJECT.md):
 
-- ✅ ReScript (primary application code)
+- ✅ AffineScript (primary application code)
 
 - ✅ Julia (data processing, batch scripts)
 

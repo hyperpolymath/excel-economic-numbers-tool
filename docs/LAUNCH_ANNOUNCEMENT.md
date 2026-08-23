@@ -70,7 +70,7 @@ Economic Toolkit works everywhere you do:
 
 Built with modern, high-performance technology:
 - **Julia 1.10+** for numerical computing (10-100x faster than Python/R)
-- **ReScript + React** for type-safe, reliable UIs
+- **AffineScript + React** for type-safe, reliable UIs
 - **Deno 2.0+** for secure runtime
 - **Rust/WASM** for performance-critical visualizations
 - **Docker** for easy deployment

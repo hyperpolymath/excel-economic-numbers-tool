@@ -9,7 +9,7 @@ updates:
       actions:
         patterns:
           - "*"
-  - package-ecosystem: "nix"
+  - package-ecosystem: "guix"
     directory: "/"
     schedule:
       interval: "weekly"

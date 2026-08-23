@@ -25,7 +25,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 **Released**: December 2025
 
 - ✅ Google Sheets add-on with custom functions
-- ✅ Standalone web application (ReScript + React)
+- ✅ Standalone web application (AffineScript + React)
 - ✅ Mobile apps for iOS and Android (Tauri 2.0)
 - ✅ Real-time collaboration with WebSocket server
 - ✅ Cloud cache sync with S3
@@ -192,7 +192,7 @@ See: [RFC Process](docs/governance/RFC_PROCESS.md)
 | Excel (Mac) | ✅ Production | UDF add-in |
 | LibreOffice | ✅ Production | UDF macros |
 | Google Sheets | ✅ Production | Apps Script add-on |
-| Web Browser | ✅ Production | ReScript + React app |
+| Web Browser | ✅ Production | AffineScript + React app |
 | iOS | ✅ Production | Tauri 2.0 |
 | Android | ✅ Production | Tauri 2.0 |
 | Python | ✅ Production | pip package |

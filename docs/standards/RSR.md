@@ -28,7 +28,7 @@ The RSR Framework defines 11 categories of repository quality:
   - Explicit types for all public APIs
   - No `any` in production code (warnings only)
 
-- **ReScript**: Sound type system
+- **AffineScript**: Sound type system
   - Compile-time type checking
   - No runtime type errors
 
@@ -137,7 +137,7 @@ Additional documentation:
   - `just lint` - Linting
   - `just deploy` - Deployment
 
-- ✅ flake.nix (Nix reproducible builds)
+- ✅ flake.guix (Guix reproducible builds)
   - Hermetic builds
   - Pinned dependencies
   - Cross-platform support
@@ -202,13 +202,13 @@ See [TPCF.md](TPCF.md) for full details.
 Current stack:
 - Julia (backend, formulas)
 - TypeScript (adapters, strict mode)
-- ReScript (UI, sound types)
+- AffineScript (UI, sound types)
 - JavaScript/ES5 (LibreOffice, no types)
 
 **Verification**:
 - ✅ Julia: Type annotations, testing
 - ✅ TypeScript: Strict mode, ESLint
-- ✅ ReScript: Compile-time checks
+- ✅ AffineScript: Compile-time checks
 - ⚠️ JavaScript (UNO): No type checking
 - ✗ FFI contracts: Not formalized
 - ✗ SPARK proofs: Not present
@@ -340,7 +340,7 @@ Expected output:
 ✅ .well-known/ai.txt present
 ✅ .well-known/humans.txt present
 ✅ Justfile present
-✅ flake.nix present
+✅ flake.guix present
 ✅ TPCF.md present
 ✅ Tests passing (300+ cases)
 

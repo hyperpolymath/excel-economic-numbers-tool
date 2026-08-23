@@ -22,7 +22,7 @@ This release marks the completion of the comprehensive roadmap from v2.1 through
 - ✅ **Microsoft Excel** (Office.js add-in)
 - ✅ **LibreOffice Calc** (UNO API extension)
 - ✅ **Google Sheets** (Apps Script add-on)
-- ✅ **Web Application** (ReScript + React)
+- ✅ **Web Application** (AffineScript + React)
 - ✅ **Mobile Apps** (iOS/Android via Tauri 2.0)
 - ✅ **Python API** (pip installable)
 - ✅ **R Package** (CRAN ready)

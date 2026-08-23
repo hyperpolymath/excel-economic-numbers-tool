@@ -1,13 +1,13 @@
 {
   "name": "@hyperpolymath/economic-toolkit",
   "version": "2.1.0",
-  "exports": "./src/rescript/mod.ts",
+  "exports": "./src/affinescript/mod.ts",
   "tasks": {
     "dev": "deno run --watch --allow-net --allow-read --allow-env src/server.ts",
     "start": "deno run --allow-net --allow-read --allow-env src/server.ts",
-    "rescript:build": "deno run -A --node-modules-dir=auto npm:rescript@^12.0.0 build",
-    "rescript:clean": "deno run -A --node-modules-dir=auto npm:rescript@^12.0.0 clean",
-    "build": "deno task rescript:build && deno bundle src/mod.ts dist/economic-toolkit.js",
+    "affinescript:build": "deno run -A --node-modules-dir=auto npm:affinescript@^12.0.0 build",
+    "affinescript:clean": "deno run -A --node-modules-dir=auto npm:affinescript@^12.0.0 clean",
+    "build": "deno task affinescript:build && deno bundle src/mod.ts dist/economic-toolkit.js",
     "build:excel": "just build-excel",
     "build:libre": "just build-libre",
     "test": "deno test --allow-net --allow-read --allow-env",
@@ -25,7 +25,7 @@
   "lint": {
     "files": {
       "include": ["src/"],
-      "exclude": ["src/rescript/*.res.js", "node_modules/", "dist/"]
+      "exclude": ["src/affinescript/*.res.js", "node_modules/", "dist/"]
     },
     "rules": {
       "tags": ["recommended"]
@@ -34,7 +34,7 @@
   "fmt": {
     "files": {
       "include": ["src/", "tests/"],
-      "exclude": ["src/rescript/*.res.js", "node_modules/", "dist/"]
+      "exclude": ["src/affinescript/*.res.js", "node_modules/", "dist/"]
     },
     "options": {
       "useTabs": false,
@@ -57,8 +57,8 @@
     "@std/fs": "jsr:@std/fs@^1.0.0",
     "@std/http": "jsr:@std/http@^1.0.0",
     "@std/testing": "jsr:@std/testing@^1.0.0",
-    "rescript": "npm:rescript@^12.0.0",
-    "@rescript/core": "npm:@rescript/core@^1.6.0",
+    "affinescript": "npm:affinescript@^12.0.0",
+    "@affinescript/core": "npm:@affinescript/core@^1.6.0",
     "@microsoft/office-js": "npm:@microsoft/office-js@^1.1.0"
   },
   "nodeModulesDir": "auto"

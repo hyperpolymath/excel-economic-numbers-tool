@@ -15,7 +15,7 @@ This guide helps you navigate the excel-economic-numbers-tool repository structu
 |**README.adoc** |Project overview, installation, quick start
 |**LICENSE** |MPL-2.0 license text
 |**VERSION** |Current version number
-|**package.json** |Deno/ReScript package configuration
+|**package.json** |Deno/AffineScript package configuration
 |===
 
 == Source Code
@@ -25,7 +25,7 @@ This guide helps you navigate the excel-economic-numbers-tool repository structu
 |Directory |Contents
 
 |**src/** |All source code
-|**src/rescript/** |ReScript application code (UI, adapters)
+|**src/affinescript/** |AffineScript application code (UI, adapters)
 |**src/julia/** |Julia backend (data sources, formulas, cache)
 |**tests/** |Test suites (organized by language)
 |**examples/** |Usage examples and sample code
@@ -67,7 +67,7 @@ This guide helps you navigate the excel-economic-numbers-tool repository structu
 |**.build/** |Build configuration and tooling
 |**.build/Justfile** |Task automation (build, test, deploy)
 |**.build/Containerfile** |Container image definition
-|**.build/config/** |Tool configurations (Deno, ReScript, etc.)
+|**.build/config/** |Tool configurations (Deno, AffineScript, etc.)
 |**scripts/** |Utility scripts (bootstrap, deploy, verification)
 |===
 
@@ -112,7 +112,7 @@ just build-libre     # Build LibreOffice extension
 
 [source,bash]
 ----
-deno test            # Run Deno/ReScript tests
+deno test            # Run Deno/AffineScript tests
 just test            # Run all tests (Julia + Deno)
 ----
 
@@ -143,11 +143,11 @@ excel-economic-numbers-tool/
 ├── package.json                   # Package config
 │
 ├── src/                           # Source code
-│   ├── rescript/                  # ReScript UI
+│   ├── affinescript/                  # AffineScript UI
 │   └── julia/                     # Julia backend
 │
 ├── tests/                         # Test suites
-│   ├── rescript/                  # ReScript tests
+│   ├── affinescript/                  # AffineScript tests
 │   └── julia/                     # Julia tests
 │
 ├── examples/                      # Usage examples
