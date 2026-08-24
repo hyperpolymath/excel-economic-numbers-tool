@@ -88,7 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Configuration
 - TypeScript config (tsconfig.json, webpack, jest, eslint, prettier)
-- ReScript config (bsconfig.json)
+- AffineScript config (bsconfig.json)
 - Julia project (Project.toml)
 - Node package (package.json)
 
@@ -118,7 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Advanced usage examples (7 scenarios)
 - Real-world distribution analysis
 
-#### UI Components (ReScript)
+#### UI Components (AffineScript)
 - DataBrowser task pane
 - FormulaBuilder task pane
 - Ribbon tabs structure (planned: 5 tabs)

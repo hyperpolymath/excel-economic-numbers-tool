@@ -11,7 +11,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 3. [Component Architecture](#component-architecture)
 4. [Cross-Platform Abstraction Layer](#cross-platform-abstraction-layer)
 5. [Julia Backend Architecture](#julia-backend-architecture)
-6. [TypeScript/ReScript Frontend Architecture](#typescriptescript-frontend-architecture)
+6. [TypeScript/AffineScript Frontend Architecture](#typescriptescript-frontend-architecture)
 7. [Data Flow](#data-flow)
 8. [Caching Strategy](#caching-strategy)
 9. [Rate Limiting Implementation](#rate-limiting-implementation)
@@ -30,7 +30,7 @@ The Excel Economic Number Tool is a **cross-platform add-in** for Microsoft Exce
 ### Key Characteristics
 
 - **Cross-Platform**: Single codebase supports both Excel (Office.js) and LibreOffice (UNO API)
-- **Client-Server Architecture**: TypeScript/ReScript frontend communicates with Julia backend via HTTP
+- **Client-Server Architecture**: TypeScript/AffineScript frontend communicates with Julia backend via HTTP
 - **High Performance**: Julia backend provides fast numerical computations
 - **Resilient**: Built-in caching, rate limiting, and retry mechanisms
 - **Extensible**: Plugin-based data source architecture
@@ -39,7 +39,7 @@ The Excel Economic Number Tool is a **cross-platform add-in** for Microsoft Exce
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| Frontend | TypeScript/ReScript | Cross-platform spreadsheet integration |
+| Frontend | TypeScript/AffineScript | Cross-platform spreadsheet integration |
 | Backend | Julia 1.10+ | Data fetching, caching, formulas, API server |
 | Data Storage | SQLite | Persistent cache with TTL |
 | Communication | HTTP/REST | JSON-based API |
@@ -110,7 +110,7 @@ All platform-specific implementations conform to `ISpreadsheetAdapter` interface
 │  │(Excel)      │  │(LibreOffice)│                                  │
 │  └─────────────┘  └─────────────┘                                  │
 │                                                                      │
-│  TypeScript/ReScript Frontend                                       │
+│  TypeScript/AffineScript Frontend                                       │
 └─────────────────────────────────────────────────────────────────────┘
                                    │
                                    │ HTTP/REST (JSON)
@@ -365,7 +365,7 @@ using SHA           # Hash functions for cache keys
 
 ---
 
-## TypeScript/ReScript Frontend Architecture
+## TypeScript/AffineScript Frontend Architecture
 
 ### Layer Structure
 
@@ -439,9 +439,9 @@ async batch<T>(operations: () => Promise<T>): Promise<T> {
 - Strict mode enabled
 - Source maps for debugging
 
-### ReScript Integration
+### AffineScript Integration
 
-ReScript is used for:
+AffineScript is used for:
 - Type-safe functional programming
 - Advanced pattern matching
 - Compiled to JavaScript (interops with TypeScript)

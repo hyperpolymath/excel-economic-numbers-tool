@@ -29,7 +29,7 @@ The project has progressed from **40% → 75% completion** by implementing:
 
 ### 1.1 Excel Adapter (OfficeJsAdapter.res) ✅
 
-**File:** `src/rescript/adapters/OfficeJsAdapter.res` (450 lines)
+**File:** `src/affinescript/adapters/OfficeJsAdapter.res` (450 lines)
 
 **Implementation:**
 - ✅ Office.js API bindings (external declarations)
@@ -47,17 +47,17 @@ The project has progressed from **40% → 75% completion** by implementing:
 
 **Key features:**
 - Cell address parsing (A1 notation → row/col indices)
-- Type conversion (ReScript cellValue ↔ JavaScript values)
+- Type conversion (AffineScript cellValue ↔ JavaScript values)
 - Proper promise handling for async operations
 - Event subscription/unsubscription management
 
 ### 1.2 LibreOffice Adapter (UnoAdapter.res + uno-bridge.js) ✅
 
 **Files:**
-- `src/rescript/adapters/UnoAdapter.res` (350 lines) ✅
+- `src/affinescript/adapters/UnoAdapter.res` (350 lines) ✅
 - `src/libreoffice/uno-bridge.js` (550 lines) ✅
 
-**Architecture:** ReScript → JavaScript bridge → UNO Java API → LibreOffice Calc
+**Architecture:** AffineScript → JavaScript bridge → UNO Java API → LibreOffice Calc
 
 **uno-bridge.js implementation:**
 - ✅ UNO Java class imports (XSpreadsheet, XCell, XCellRange, etc.)
@@ -235,7 +235,7 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 
 **What remains:**
 - Delete `.build/config/tsconfig.json` (TypeScript removed)
-- Delete `.build/config/bsconfig.json` (superseded by root rescript.json)
+- Delete `.build/config/bsconfig.json` (superseded by root affinescript.json)
 - Delete `.build/config/Project.toml` (moved to root)
 - Update Justfile (replace `npm` with `deno`)
 
@@ -245,11 +245,11 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 
 ## Compilation Status
 
-### ReScript Compilation
+### AffineScript Compilation
 
 **Status:** ✅ **Adapters compiled successfully**
 
-**Command:** `rescript build`
+**Command:** `affinescript build`
 
 **Result:**
 - ✅ 63/66 modules compiled (95% success rate)
@@ -263,7 +263,7 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 - These are UI task pane files, not core platform adapters
 - **Impact:** Task pane UI non-functional, but platform adapters work
 
-**Resolution:** Would require adding React dependencies to rescript.json
+**Resolution:** Would require adding React dependencies to affinescript.json
 
 ---
 
@@ -317,8 +317,8 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 ### New Files (22 total)
 
 **Phase 1 - Platform Integration (10 files):**
-1. `src/rescript/adapters/OfficeJsAdapter.res` (450 lines)
-2. `src/rescript/adapters/UnoAdapter.res` (350 lines)
+1. `src/affinescript/adapters/OfficeJsAdapter.res` (450 lines)
+2. `src/affinescript/adapters/UnoAdapter.res` (350 lines)
 3. `src/libreoffice/uno-bridge.js` (550 lines)
 4. `manifests/excel-manifest.xml` (150 lines)
 5. `src/excel/taskpane.html` (100 lines)
@@ -341,7 +341,7 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 
 ### Modified Files (3 total)
 1. `package.json` - Fixed name mismatch (economic-toolkit-v2 → economic-toolkit)
-2. `src/rescript/ConstraintEditor.res` - Fixed reserved keyword (`constraint` → `constraintDef`)
+2. `src/affinescript/ConstraintEditor.res` - Fixed reserved keyword (`constraint` → `constraintDef`)
 
 ---
 
