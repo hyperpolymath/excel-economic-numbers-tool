@@ -26,7 +26,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
                                               ▼
                         ┌─────────────────────────────────────────┐
                         │           APPLICATION LAYER             │
-                        │    (ReScript, Logic, API Orchestration) │
+                        │    (AffineScript, Logic, API Orchestration) │
                         └──────────┬───────────────────┬──────────┘
                                    │                   │
                                    ▼                   ▼
@@ -60,7 +60,7 @@ USER INTERFACES
   Navigation Guide                  ██████████ 100%    NAVIGATION.adoc verified
 
 CORE & BACKEND
-  ReScript Application Logic        ██████████ 100%    Type-safe core stable
+  AffineScript Application Logic        ██████████ 100%    Type-safe core stable
   Julia Computational Backend       ██████████ 100%    Economic functions verified
   SQLite Caching                    ██████████ 100%    Persistent data verified
   Rate Limiting / Quotas            ██████████ 100%    API respect verified
@@ -72,7 +72,7 @@ DATA SOURCES
 REPO INFRASTRUCTURE
   Justfile (.build/ directory)      ██████████ 100%    Multi-platform build stable
   .machine_readable/                ██████████ 100%    STATE.a2ml tracking
-  Comprehensive Tests               ██████████ 100%    High ReScript/Julia coverage
+  Comprehensive Tests               ██████████ 100%    High AffineScript/Julia coverage
 
 ─────────────────────────────────────────────────────────────────────────────
 OVERALL:                            ██████████ 100%    v10.0 Production Ready
@@ -81,7 +81,7 @@ OVERALL:                            ██████████ 100%    v10.0
 ## Key Dependencies
 
 ```
-External API ───► Julia Backend ───► ReScript Core ───► Office.js
+External API ───► Julia Backend ───► AffineScript Core ───► Office.js
      │                 │                 │                 │
      ▼                 ▼                 ▼                 ▼
 Rate Limiter ─────► SQLite Cache ──────► Function Map ──► Spreadsheet

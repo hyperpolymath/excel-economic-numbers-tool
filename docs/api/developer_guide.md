@@ -73,7 +73,7 @@ economic-toolkit-v2/
 │   ├── typescript/         # TypeScript frontend
 │   │   ├── adapters/       # Platform adapters
 │   │   └── utils/          # Utilities
-│   └── rescript/           # ReScript UI components
+│   └── affinescript/           # AffineScript UI components
 │       ├── ribbons/        # Ribbon tabs
 │       └── taskpanes/      # Task panes
 ├── tests/                  # Test suites

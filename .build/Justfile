@@ -1,4 +1,4 @@
-# Excel-Economic-Numbers-Tool - ReScript Development Tasks
+# Excel-Economic-Numbers-Tool - AffineScript Development Tasks
 set shell := ["bash", "-uc"]
 set dotenv-load := true
 
@@ -10,23 +10,23 @@ default:
 
 # Build
 build:
-    npx rescript build
+    npx affinescript build
 
 # Build clean
 build-clean:
-    npx rescript build -clean-world
+    npx affinescript build -clean-world
 
 # Watch mode
 watch:
-    npx rescript build -w
+    npx affinescript build -w
 
 # Format code
 fmt:
-    npx rescript format -all
+    npx affinescript format -all
 
 # Clean
 clean:
-    npx rescript clean
+    npx affinescript clean
 
 # Install dependencies
 install:
