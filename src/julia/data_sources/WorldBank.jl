@@ -27,21 +27,21 @@ Client for fetching data from World Bank API.
 """
 struct WorldBankClient
     base_url::String
-    api_key::Union{String, Nothing}
+    api_key::Union{String,Nothing}
     rate_limiter::RateLimiter
     cache::SQLiteCache
     retry_config::RetryConfig
 
     function WorldBankClient(;
-        api_key::Union{String, Nothing}=nothing,
-        cache_ttl::Int=86400
+        api_key::Union{String,Nothing} = nothing,
+        cache_ttl::Int = 86400,
     )
         base_url = "https://api.worldbank.org/v2"
 
         # World Bank rate limit: 60 requests per minute
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, api_key, rate_limiter, cache, retry_config)
@@ -69,7 +69,13 @@ client = WorldBankClient()
 data = fetch_series(client, "NY.GDP.MKTP.CD", "US", Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(client::WorldBankClient, series_id::String, country_code::String, start_date::Date, end_date::Date)::DataFrame
+function fetch_series(
+    client::WorldBankClient,
+    series_id::String,
+    country_code::String,
+    start_date::Date,
+    end_date::Date,
+)::DataFrame
     # Check cache first
     key = cache_key("worldbank", series_id, country_code, start_date, end_date)
     cached = get_cached(client.cache, key)
@@ -97,14 +103,14 @@ function fetch_series(client::WorldBankClient, series_id::String, country_code::
         params = Dict(
             "date" => "$(start_year):$(end_year)",
             "format" => "json",
-            "per_page" => "1000"  # Get more results per page
+            "per_page" => "1000",  # Get more results per page
         )
 
         url = "$(client.base_url)/country/$(country_code)/indicator/$(series_id)"
 
         @debug "WorldBank: Making API request" url series_id country_code
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -123,13 +129,13 @@ function fetch_series(client::WorldBankClient, series_id::String, country_code::
         # World Bank API returns array with [metadata, data]
         if length(data) < 2 || data[2] === nothing
             # No data available
-            df = DataFrame(date=Date[], value=Union{Float64, Missing}[])
+            df = DataFrame(date = Date[], value = Union{Float64,Missing}[])
         else
             observations = data[2]
 
             # Filter out null values and convert to DataFrame
             dates = Date[]
-            values = Union{Float64, Missing}[]
+            values = Union{Float64,Missing}[]
 
             for obs in observations
                 if obs.value !== nothing && obs.date !== nothing
@@ -140,7 +146,7 @@ function fetch_series(client::WorldBankClient, series_id::String, country_code::
                 end
             end
 
-            df = DataFrame(date=dates, value=values)
+            df = DataFrame(date = dates, value = values)
 
             # Sort by date (World Bank returns newest first)
             sort!(df, :date)
@@ -154,7 +160,11 @@ function fetch_series(client::WorldBankClient, series_id::String, country_code::
             client.cache,
             key,
             JSON3.write(df),
-            metadata=Dict("source" => "worldbank", "series_id" => series_id, "country" => country_code)
+            metadata = Dict(
+                "source" => "worldbank",
+                "series_id" => series_id,
+                "country" => country_code,
+            ),
         )
 
         return df
@@ -183,7 +193,11 @@ client = WorldBankClient()
 results = search_series(client, "GDP")
 ```
 """
-function search_series(client::WorldBankClient, query::String; limit::Int=100)::Vector{Dict}
+function search_series(
+    client::WorldBankClient,
+    query::String;
+    limit::Int = 100,
+)::Vector{Dict}
     # Check cache
     key = cache_key("worldbank", "search:$query")
     cached = get_cached(client.cache, key)
@@ -199,17 +213,14 @@ function search_series(client::WorldBankClient, query::String; limit::Int=100)::
     end
 
     # Build request
-    params = Dict(
-        "format" => "json",
-        "per_page" => string(limit)
-    )
+    params = Dict("format" => "json", "per_page" => string(limit))
 
     # World Bank doesn't have direct search, so we fetch all indicators and filter
     # For better performance, we use source=2 (World Development Indicators)
     url = "$(client.base_url)/indicator"
 
     # Execute request
-    response = HTTP.get(url, query=params)
+    response = HTTP.get(url, query = params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -232,7 +243,7 @@ function search_series(client::WorldBankClient, query::String; limit::Int=100)::
         source_note = get(indicator, :sourceNote, "")
 
         lowercase(name) * lowercase(id) * lowercase(source_note) |>
-            text -> occursin(query_lower, text)
+        text -> occursin(query_lower, text)
     end
 
     # Extract relevant fields
@@ -243,9 +254,8 @@ function search_series(client::WorldBankClient, query::String; limit::Int=100)::
             "source" => get(indicator.source, :value, ""),
             "source_note" => get(indicator, :sourceNote, ""),
             "source_organization" => get(indicator, :sourceOrganization, ""),
-            "topics" => get(indicator, :topics, [])
-        )
-        for indicator in first(filtered_results, limit)
+            "topics" => get(indicator, :topics, []),
+        ) for indicator in first(filtered_results, limit)
     ]
 
     # Cache results
@@ -253,8 +263,8 @@ function search_series(client::WorldBankClient, query::String; limit::Int=100)::
         client.cache,
         key,
         JSON3.write(results),
-        ttl=3600,  # Cache searches for 1 hour
-        metadata=Dict("source" => "worldbank", "type" => "search")
+        ttl = 3600,  # Cache searches for 1 hour
+        metadata = Dict("source" => "worldbank", "type" => "search"),
     )
 
     return results
@@ -284,12 +294,10 @@ function get_series_info(client::WorldBankClient, series_id::String)::Dict
         throw(ErrorException("Rate limit timeout"))
     end
 
-    params = Dict(
-        "format" => "json"
-    )
+    params = Dict("format" => "json")
 
     url = "$(client.base_url)/indicator/$(series_id)"
-    response = HTTP.get(url, query=params)
+    response = HTTP.get(url, query = params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -311,6 +319,6 @@ function get_series_info(client::WorldBankClient, series_id::String)::Dict
         "source_note" => get(indicator, :sourceNote, ""),
         "source_organization" => get(indicator, :sourceOrganization, ""),
         "topics" => get(indicator, :topics, []),
-        "unit" => get(indicator, :unit, "")
+        "unit" => get(indicator, :unit, ""),
     )
 end
