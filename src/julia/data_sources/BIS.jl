@@ -41,13 +41,13 @@ struct BISClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function BISClient(; cache_ttl::Int=86400)
+    function BISClient(; cache_ttl::Int = 86400)
         base_url = "https://stats.bis.org/api/v1"
 
         # Rate limit: 60 requests per minute
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -71,11 +71,13 @@ dataset, freq, series = parse_bis_series_id("CBPOL:M:US")
 # Returns: ("CBPOL", "M", "US")
 ```
 """
-function parse_bis_series_id(series_id::String)::Tuple{String, String, String}
+function parse_bis_series_id(series_id::String)::Tuple{String,String,String}
     parts = split(series_id, ":")
 
     if length(parts) != 3
-        error("Invalid BIS series ID format. Expected 'DATASET:FREQUENCY:SERIES', got: $series_id")
+        error(
+            "Invalid BIS series ID format. Expected 'DATASET:FREQUENCY:SERIES', got: $series_id",
+        )
     end
 
     dataset = parts[1]
@@ -162,7 +164,12 @@ data = fetch_series(client, "CBPOL:M:US", Date(2020, 1, 1), Date(2023, 12, 31))
 data = fetch_series(client, "CREDIT:Q:US:P", Date(2015, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(client::BISClient, series_id::String, start_date::Date, end_date::Date)::DataFrame
+function fetch_series(
+    client::BISClient,
+    series_id::String,
+    start_date::Date,
+    end_date::Date,
+)::DataFrame
     # Parse series ID
     dataset, frequency, series = parse_bis_series_id(series_id)
 
@@ -188,14 +195,11 @@ function fetch_series(client::BISClient, series_id::String, start_date::Date, en
         # BIS API format: /data/{dataset}/{frequency}/{series}
         url = "$(client.base_url)/data/$(dataset)/$(frequency)/$(series)"
 
-        params = Dict(
-            "format" => "json",
-            "detail" => "dataonly"
-        )
+        params = Dict("format" => "json", "detail" => "dataonly")
 
         @debug "BIS: Making API request" url series_id
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -205,7 +209,8 @@ function fetch_series(client::BISClient, series_id::String, start_date::Date, en
     end
 
     # Execute with retry and cache fallback
-    body, from_cache = with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
+    body, from_cache =
+        with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
 
     if !from_cache
         # Parse fresh response
@@ -213,7 +218,7 @@ function fetch_series(client::BISClient, series_id::String, start_date::Date, en
 
         # Extract observations
         dates = Date[]
-        values = Union{Float64, Missing}[]
+        values = Union{Float64,Missing}[]
 
         if haskey(json_data, :dataSets) && length(json_data.dataSets) > 0
             dataset_obj = json_data.dataSets[1]
@@ -254,7 +259,11 @@ function fetch_series(client::BISClient, series_id::String, start_date::Date, en
                                         end
 
                                         push!(dates, date_val)
-                                        push!(values, value_val === nothing ? missing : Float64(value_val))
+                                        push!(
+                                            values,
+                                            value_val === nothing ? missing :
+                                            Float64(value_val),
+                                        )
                                     end
                                 end
                                 break
@@ -268,9 +277,9 @@ function fetch_series(client::BISClient, series_id::String, start_date::Date, en
         # Sort by date
         if !isempty(dates)
             perm = sortperm(dates)
-            df = DataFrame(date=dates[perm], value=values[perm])
+            df = DataFrame(date = dates[perm], value = values[perm])
         else
-            df = DataFrame(date=Date[], value=Union{Float64, Missing}[])
+            df = DataFrame(date = Date[], value = Union{Float64,Missing}[])
         end
 
         # Cache successful response
@@ -309,7 +318,7 @@ results = search_series(client, "credit")
 results = search_series(client, "policy rate", limit=50)
 ```
 """
-function search_series(client::BISClient, query::String; limit::Int=100)::Vector{Dict}
+function search_series(client::BISClient, query::String; limit::Int = 100)::Vector{Dict}
     # Check cache first
     cache_id = cache_key("bis_search", query, limit)
     cached = get_cached(client.cache, cache_id)
@@ -332,13 +341,11 @@ function search_series(client::BISClient, query::String; limit::Int=100)::Vector
         # BIS dataflow catalog
         url = "$(client.base_url)/dataflow"
 
-        params = Dict(
-            "format" => "json"
-        )
+        params = Dict("format" => "json")
 
         @debug "BIS: Making search API request" url query
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -348,7 +355,8 @@ function search_series(client::BISClient, query::String; limit::Int=100)::Vector
     end
 
     # Execute with retry
-    body, from_cache = with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
+    body, from_cache =
+        with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
 
     if !from_cache
         # Parse JSON response
@@ -368,12 +376,15 @@ function search_series(client::BISClient, query::String; limit::Int=100)::Vector
                    occursin(lowercase(query), lowercase(id)) ||
                    occursin(lowercase(query), lowercase(description))
 
-                    push!(results, Dict(
-                        "id" => id,
-                        "name" => name,
-                        "description" => description,
-                        "source" => "bis"
-                    ))
+                    push!(
+                        results,
+                        Dict(
+                            "id" => id,
+                            "name" => name,
+                            "description" => description,
+                            "source" => "bis",
+                        ),
+                    )
 
                     if length(results) >= limit
                         break
@@ -416,7 +427,7 @@ end
 ```
 """
 function list_datasets(client::BISClient)::Vector{Dict}
-    return search_series(client, "", limit=1000)
+    return search_series(client, "", limit = 1000)
 end
 
 export BISClient, fetch_series, search_series, list_datasets, parse_bis_series_id
