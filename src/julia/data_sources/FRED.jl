@@ -27,14 +27,14 @@ Client for fetching data from FRED API.
 """
 struct FREDClient
     base_url::String
-    api_key::Union{String, Nothing}
+    api_key::Union{String,Nothing}
     rate_limiter::RateLimiter
     cache::SQLiteCache
     retry_config::RetryConfig
 
     function FREDClient(;
-        api_key::Union{String, Nothing}=get(ENV, "FRED_API_KEY", nothing),
-        cache_ttl::Int=86400
+        api_key::Union{String,Nothing} = get(ENV, "FRED_API_KEY", nothing),
+        cache_ttl::Int = 86400,
     )
         base_url = "https://api.stlouisfed.org/fred"
 
@@ -42,7 +42,7 @@ struct FREDClient
         rate_limit = api_key === nothing ? 5 : 120
         rate_limiter = RateLimiter(rate_limit)
 
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, api_key, rate_limiter, cache, retry_config)
@@ -69,7 +69,12 @@ client = FREDClient()
 data = fetch_series(client, "GDPC1", Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(client::FREDClient, series_id::String, start_date::Date, end_date::Date)::DataFrame
+function fetch_series(
+    client::FREDClient,
+    series_id::String,
+    start_date::Date,
+    end_date::Date,
+)::DataFrame
     # Check cache first
     key = cache_key("fred", series_id, start_date, end_date)
     cached = get_cached(client.cache, key)
@@ -94,7 +99,7 @@ function fetch_series(client::FREDClient, series_id::String, start_date::Date, e
             "series_id" => series_id,
             "observation_start" => Dates.format(start_date, "yyyy-mm-dd"),
             "observation_end" => Dates.format(end_date, "yyyy-mm-dd"),
-            "file_type" => "json"
+            "file_type" => "json",
         )
 
         if client.api_key !== nothing
@@ -105,7 +110,7 @@ function fetch_series(client::FREDClient, series_id::String, start_date::Date, e
 
         @debug "FRED: Making API request" url series_id
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -124,16 +129,17 @@ function fetch_series(client::FREDClient, series_id::String, start_date::Date, e
         # Convert to DataFrame
         observations = data.observations
         dates = [Date(obs.date) for obs in observations]
-        values = [obs.value == "." ? missing : parse(Float64, obs.value) for obs in observations]
+        values =
+            [obs.value == "." ? missing : parse(Float64, obs.value) for obs in observations]
 
-        df = DataFrame(date=dates, value=values)
+        df = DataFrame(date = dates, value = values)
 
         # Cache the result
         set_cached(
             client.cache,
             key,
             JSON3.write(df),
-            metadata=Dict("source" => "fred", "series_id" => series_id)
+            metadata = Dict("source" => "fred", "series_id" => series_id),
         )
 
         return df
@@ -162,7 +168,7 @@ client = FREDClient()
 results = search_series(client, "GDP")
 ```
 """
-function search_series(client::FREDClient, query::String; limit::Int=100)::Vector{Dict}
+function search_series(client::FREDClient, query::String; limit::Int = 100)::Vector{Dict}
     # Check cache
     key = cache_key("fred", "search:$query")
     cached = get_cached(client.cache, key)
@@ -178,11 +184,7 @@ function search_series(client::FREDClient, query::String; limit::Int=100)::Vecto
     end
 
     # Build request
-    params = Dict(
-        "search_text" => query,
-        "limit" => string(limit),
-        "file_type" => "json"
-    )
+    params = Dict("search_text" => query, "limit" => string(limit), "file_type" => "json")
 
     if client.api_key !== nothing
         params["api_key"] = client.api_key
@@ -191,7 +193,7 @@ function search_series(client::FREDClient, query::String; limit::Int=100)::Vecto
     url = "$(client.base_url)/series/search"
 
     # Execute request
-    response = HTTP.get(url, query=params)
+    response = HTTP.get(url, query = params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -207,9 +209,8 @@ function search_series(client::FREDClient, query::String; limit::Int=100)::Vecto
             "frequency" => get(series, :frequency, ""),
             "units" => get(series, :units, ""),
             "seasonal_adjustment" => get(series, :seasonal_adjustment, ""),
-            "last_updated" => get(series, :last_updated, "")
-        )
-        for series in data.seriess
+            "last_updated" => get(series, :last_updated, ""),
+        ) for series in data.seriess
     ]
 
     # Cache results
@@ -217,8 +218,8 @@ function search_series(client::FREDClient, query::String; limit::Int=100)::Vecto
         client.cache,
         key,
         JSON3.write(results),
-        ttl=3600,  # Cache searches for 1 hour
-        metadata=Dict("source" => "fred", "type" => "search")
+        ttl = 3600,  # Cache searches for 1 hour
+        metadata = Dict("source" => "fred", "type" => "search"),
     )
 
     return results
@@ -248,17 +249,14 @@ function get_series_info(client::FREDClient, series_id::String)::Dict
         throw(ErrorException("Rate limit timeout"))
     end
 
-    params = Dict(
-        "series_id" => series_id,
-        "file_type" => "json"
-    )
+    params = Dict("series_id" => series_id, "file_type" => "json")
 
     if client.api_key !== nothing
         params["api_key"] = client.api_key
     end
 
     url = "$(client.base_url)/series"
-    response = HTTP.get(url, query=params)
+    response = HTTP.get(url, query = params)
 
     data = JSON3.read(response.body)
     series = first(data.seriess)
@@ -271,6 +269,6 @@ function get_series_info(client::FREDClient, series_id::String)::Dict
         "frequency" => series.frequency,
         "units" => series.units,
         "seasonal_adjustment" => get(series, :seasonal_adjustment, ""),
-        "notes" => get(series, :notes, "")
+        "notes" => get(series, :notes, ""),
     )
 end
