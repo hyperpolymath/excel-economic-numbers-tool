@@ -29,7 +29,7 @@ incomes = [10000.0, 20000.0, 30000.0, 50000.0, 100000.0]
 pop_share, income_share = lorenz_curve(incomes)
 ```
 """
-function lorenz_curve(incomes::Vector{Float64})::Tuple{Vector{Float64}, Vector{Float64}}
+function lorenz_curve(incomes::Vector{Float64})::Tuple{Vector{Float64},Vector{Float64}}
     if any(incomes .< 0)
         throw(ArgumentError("Incomes cannot be negative"))
     end
@@ -104,7 +104,7 @@ function gini_coefficient(incomes::Vector{Float64})::Float64
         return 0.0
     end
 
-    weighted_sum = sum(i * sorted_incomes[i] for i in 1:n)
+    weighted_sum = sum(i * sorted_incomes[i] for i = 1:n)
 
     gini = (2 * weighted_sum) / (n * total_income) - (n + 1) / n
 
@@ -125,7 +125,10 @@ Uses trapezoidal rule to integrate area between Lorenz curve and line of equalit
 # Returns
 - `Float64`: Gini coefficient
 """
-function gini_from_lorenz(population_share::Vector{Float64}, income_share::Vector{Float64})::Float64
+function gini_from_lorenz(
+    population_share::Vector{Float64},
+    income_share::Vector{Float64},
+)::Float64
     if length(population_share) != length(income_share)
         throw(ArgumentError("Population and income shares must have same length"))
     end
@@ -134,7 +137,7 @@ function gini_from_lorenz(population_share::Vector{Float64}, income_share::Vecto
 
     # Area under Lorenz curve using trapezoidal rule
     area_under_lorenz = 0.0
-    for i in 2:n
+    for i = 2:n
         dx = population_share[i] - population_share[i-1]
         avg_height = (income_share[i] + income_share[i-1]) / 2
         area_under_lorenz += dx * avg_height
@@ -167,7 +170,7 @@ The Atkinson index measures inequality with sensitivity parameter ε.
 # Returns
 - `Float64`: Atkinson index (0 = perfect equality, 1 = perfect inequality)
 """
-function atkinson_index(incomes::Vector{Float64}; epsilon::Float64=1.0)::Float64
+function atkinson_index(incomes::Vector{Float64}; epsilon::Float64 = 1.0)::Float64
     if any(incomes .< 0)
         throw(ArgumentError("Incomes cannot be negative"))
     end
@@ -236,7 +239,8 @@ function theil_index(incomes::Vector{Float64})::Float64
 
     # Theil T = (1/n) * Σ(y_i/μ * log(y_i/μ))
     n = length(positive_incomes)
-    theil = sum((inc / mean_income) * log(inc / mean_income) for inc in positive_incomes) / n
+    theil =
+        sum((inc / mean_income) * log(inc / mean_income) for inc in positive_incomes) / n
 
     return theil
 end
@@ -260,7 +264,7 @@ incomes = [...]
 p90_p10 = percentile_ratio(incomes, 90, 10)  # 90th/10th percentile ratio
 ```
 """
-function percentile_ratio(incomes::Vector{Float64}, p1::Int=90, p2::Int=10)::Float64
+function percentile_ratio(incomes::Vector{Float64}, p1::Int = 90, p2::Int = 10)::Float64
     if p1 <= p2
         throw(ArgumentError("p1 must be greater than p2"))
     end

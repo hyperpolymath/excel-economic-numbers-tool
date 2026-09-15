@@ -20,7 +20,11 @@ Simple exponential smoothing forecast.
 # Returns
 - `Vector{Float64}`: Forecasted values
 """
-function exponential_smoothing(data::Vector{Float64}, alpha::Float64=0.3, h::Int=1)::Vector{Float64}
+function exponential_smoothing(
+    data::Vector{Float64},
+    alpha::Float64 = 0.3,
+    h::Int = 1,
+)::Vector{Float64}
     @assert 0 < alpha < 1 "Alpha must be between 0 and 1"
     @assert h > 0 "Forecast horizon must be positive"
 
@@ -29,7 +33,7 @@ function exponential_smoothing(data::Vector{Float64}, alpha::Float64=0.3, h::Int
     forecasts = Float64[]
 
     # Fit the model
-    for t in 2:n
+    for t = 2:n
         level = alpha * data[t] + (1 - alpha) * level
     end
 
@@ -48,9 +52,9 @@ Double exponential smoothing (Holt's method) for trend.
 """
 function double_exponential_smoothing(
     data::Vector{Float64},
-    alpha::Float64=0.3,
-    beta::Float64=0.1,
-    h::Int=1
+    alpha::Float64 = 0.3,
+    beta::Float64 = 0.1,
+    h::Int = 1,
 )::Vector{Float64}
     @assert 0 < alpha < 1 && 0 < beta < 1 "Alpha and beta must be between 0 and 1"
 
@@ -60,14 +64,14 @@ function double_exponential_smoothing(
     forecasts = Float64[]
 
     # Fit the model
-    for t in 2:n
+    for t = 2:n
         prev_level = level
         level = alpha * data[t] + (1 - alpha) * (level + trend)
         trend = beta * (level - prev_level) + (1 - beta) * trend
     end
 
     # Generate forecasts
-    for i in 1:h
+    for i = 1:h
         push!(forecasts, level + i * trend)
     end
 
@@ -88,10 +92,10 @@ Triple exponential smoothing (Holt-Winters) for trend and seasonality.
 function triple_exponential_smoothing(
     data::Vector{Float64},
     period::Int,
-    alpha::Float64=0.3,
-    beta::Float64=0.1,
-    gamma::Float64=0.1,
-    h::Int=1
+    alpha::Float64 = 0.3,
+    beta::Float64 = 0.1,
+    gamma::Float64 = 0.1,
+    h::Int = 1,
 )::Vector{Float64}
     @assert period > 0 "Period must be positive"
     @assert length(data) >= 2 * period "Need at least 2 full periods of data"
@@ -100,20 +104,22 @@ function triple_exponential_smoothing(
 
     # Initialize level, trend, and seasonal components
     level = mean(data[1:period])
-    trend = (mean(data[period+1:2*period]) - level) / period
+    trend = (mean(data[(period+1):(2*period)]) - level) / period
     seasonal = data[1:period] .- level
 
     # Fit the model
-    for t in period+1:n
+    for t = (period+1):n
         prev_level = level
-        level = alpha * (data[t] - seasonal[mod1(t, period)]) + (1 - alpha) * (level + trend)
+        level =
+            alpha * (data[t] - seasonal[mod1(t, period)]) + (1 - alpha) * (level + trend)
         trend = beta * (level - prev_level) + (1 - beta) * trend
-        seasonal[mod1(t, period)] = gamma * (data[t] - level) + (1 - gamma) * seasonal[mod1(t, period)]
+        seasonal[mod1(t, period)] =
+            gamma * (data[t] - level) + (1 - gamma) * seasonal[mod1(t, period)]
     end
 
     # Generate forecasts
     forecasts = Float64[]
-    for i in 1:h
+    for i = 1:h
         forecast = level + i * trend + seasonal[mod1(n + i, period)]
         push!(forecasts, forecast)
     end
@@ -138,8 +144,8 @@ function seasonal_decompose(data::Vector{Float64}, period::Int)
     trend = zeros(n)
     half_window = div(period, 2)
 
-    for i in half_window+1:n-half_window
-        trend[i] = mean(data[i-half_window:i+half_window])
+    for i = (half_window+1):(n-half_window)
+        trend[i] = mean(data[(i-half_window):(i+half_window)])
     end
 
     # Detrended data
@@ -147,7 +153,7 @@ function seasonal_decompose(data::Vector{Float64}, period::Int)
 
     # Calculate seasonal component
     seasonal = zeros(n)
-    for i in 1:period
+    for i = 1:period
         indices = i:period:n
         seasonal[indices] .= mean(detrended[indices])
     end
@@ -173,14 +179,14 @@ using a dedicated time-series library.
 """
 function arima_forecast(
     data::Vector{Float64},
-    p::Int=1,
-    d::Int=1,
-    q::Int=1,
-    h::Int=1
+    p::Int = 1,
+    d::Int = 1,
+    q::Int = 1,
+    h::Int = 1,
 )::Vector{Float64}
     # Apply differencing
     diff_data = copy(data)
-    for _ in 1:d
+    for _ = 1:d
         diff_data = diff(diff_data)
     end
 
@@ -192,10 +198,10 @@ function arima_forecast(
 
     # Fit AR model using least squares
     X = zeros(n - p, p)
-    y = diff_data[p+1:end]
+    y = diff_data[(p+1):end]
 
-    for i in 1:n-p
-        X[i, :] = diff_data[i:i+p-1]
+    for i = 1:(n-p)
+        X[i, :] = diff_data[i:(i+p-1)]
     end
 
     # AR coefficients
@@ -203,16 +209,16 @@ function arima_forecast(
 
     # Generate forecasts
     forecasts = Float64[]
-    last_values = diff_data[end-p+1:end]
+    last_values = diff_data[(end-p+1):end]
 
-    for _ in 1:h
+    for _ = 1:h
         next_val = dot(coeffs, last_values)
         push!(forecasts, next_val)
         last_values = vcat(last_values[2:end], next_val)
     end
 
     # Integrate back if differencing was applied
-    for _ in 1:d
+    for _ = 1:d
         cumsum!(forecasts, vcat([data[end]], forecasts))[2:end]
     end
 
