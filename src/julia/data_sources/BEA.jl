@@ -32,14 +32,14 @@ using DataFrames
 
 struct BEAClient
     base_url::String
-    api_key::Union{String, Nothing}
+    api_key::Union{String,Nothing}
     rate_limiter::RateLimiter
     cache::SQLiteCache
     retry_config::RetryConfig
 
     function BEAClient(;
-        api_key::Union{String, Nothing}=get(ENV, "BEA_API_KEY", nothing),
-        cache_ttl::Int=86400
+        api_key::Union{String,Nothing} = get(ENV, "BEA_API_KEY", nothing),
+        cache_ttl::Int = 86400,
     )
         if api_key === nothing
             @warn "BEA API key not provided. Some features may be limited. Get a key at https://apps.bea.gov/api/signup/"
@@ -47,7 +47,7 @@ struct BEAClient
 
         base_url = "https://apps.bea.gov/api/data"
         rate_limiter = RateLimiter(api_key !== nothing ? 100 : 30)  # Higher limit with API key
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, api_key, rate_limiter, cache, retry_config)
@@ -60,7 +60,7 @@ Examples:
 - "NIPA:T10105:A191RC" - NIPA Table 1.1.5, Line A191RC (GDP)
 - "Regional:SQGDP:1:ALL" - Regional GDP for all states
 """
-function parse_series_id(series_id::String)::Dict{String, String}
+function parse_series_id(series_id::String)::Dict{String,String}
     parts = split(series_id, ":")
     if length(parts) < 2
         throw(ArgumentError("Invalid BEA series ID format. Expected DATASET:TABLE[:LINE]"))
@@ -84,7 +84,12 @@ Arguments:
 
 Returns DataFrame with columns: date, value, series_id
 """
-function fetch_series(client::BEAClient, series_id::String, start_date::Date, end_date::Date)::DataFrame
+function fetch_series(
+    client::BEAClient,
+    series_id::String,
+    start_date::Date,
+    end_date::Date,
+)::DataFrame
     # Check cache first
     key = cache_key("bea", series_id, start_date, end_date)
     cached = get_cached(client.cache, key)
@@ -113,7 +118,7 @@ function fetch_series(client::BEAClient, series_id::String, start_date::Date, en
         "TableName" => table,
         "Frequency" => "A",  # Annual (could be Q for quarterly, M for monthly)
         "Year" => "X",  # X means all years
-        "ResultFormat" => "JSON"
+        "ResultFormat" => "JSON",
     )
 
     if line != ""
@@ -121,13 +126,14 @@ function fetch_series(client::BEAClient, series_id::String, start_date::Date, en
     end
 
     # Make request with retry logic
-    fetch_func = () -> begin
-        response = HTTP.get(client.base_url, query=params)
-        if response.status != 200
-            throw(HTTPError(response.status, "BEA API returned status $(response.status)"))
+    fetch_func =
+        () -> begin
+            response = HTTP.get(client.base_url, query = params)
+            if response.status != 200
+                throw(HTTPError(response.status, "BEA API returned status $(response.status)"))
+            end
+            return String(response.body)
         end
-        return String(response.body)
-    end
 
     try
         json_str = with_retry(fetch_func, client.retry_config)
@@ -140,7 +146,7 @@ function fetch_series(client::BEAClient, series_id::String, start_date::Date, en
     catch e
         @warn "BEA API request failed: $e"
         # Try to return cached data if available
-        cached = get_cached(client.cache, key, ignore_ttl=true)
+        cached = get_cached(client.cache, key, ignore_ttl = true)
         if cached !== nothing
             @info "Returning expired cache data due to API failure"
             return parse_bea_response(cached, series_id)
@@ -204,7 +210,7 @@ function parse_bea_response(json_str::String, series_id::String)::DataFrame
     return DataFrame(
         date = dates,
         value = values,
-        series_id = fill(series_id, length(dates))
+        series_id = fill(series_id, length(dates)),
     )
 end
 
@@ -214,7 +220,7 @@ Search for BEA data series
 Note: BEA API doesn't have a direct search endpoint. This function searches
 through available datasets and tables.
 """
-function search_series(client::BEAClient, query::String; limit::Int=100)::Vector{Dict}
+function search_series(client::BEAClient, query::String; limit::Int = 100)::Vector{Dict}
     # Rate limit
     wait_if_needed(client.rate_limiter)
 
@@ -226,43 +232,46 @@ function search_series(client::BEAClient, query::String; limit::Int=100)::Vector
             "title" => "Gross Domestic Product",
             "dataset" => "NIPA",
             "frequency" => "Annual",
-            "units" => "Billions of Dollars"
+            "units" => "Billions of Dollars",
         ),
         Dict(
             "id" => "NIPA:T10106:A191RX",
             "title" => "Real Gross Domestic Product",
             "dataset" => "NIPA",
             "frequency" => "Annual",
-            "units" => "Billions of Chained 2017 Dollars"
+            "units" => "Billions of Chained 2017 Dollars",
         ),
         Dict(
             "id" => "NIPA:T20100:DPCERC",
             "title" => "Personal Consumption Expenditures",
             "dataset" => "NIPA",
             "frequency" => "Annual",
-            "units" => "Billions of Dollars"
+            "units" => "Billions of Dollars",
         ),
         Dict(
             "id" => "NIPA:T50500:A191RC",
             "title" => "Gross Domestic Product by Industry",
             "dataset" => "NIPA",
             "frequency" => "Annual",
-            "units" => "Billions of Dollars"
+            "units" => "Billions of Dollars",
         ),
         Dict(
             "id" => "Regional:SQGDP:1:ALL",
             "title" => "State GDP - All States",
             "dataset" => "Regional",
             "frequency" => "Quarterly",
-            "units" => "Millions of Dollars"
+            "units" => "Millions of Dollars",
         ),
     ]
 
     # Filter by query
     query_lower = lowercase(query)
-    filtered = filter(s -> occursin(query_lower, lowercase(s["title"])) ||
-                           occursin(query_lower, lowercase(s["id"])),
-                      common_series)
+    filtered = filter(
+        s ->
+            occursin(query_lower, lowercase(s["title"])) ||
+            occursin(query_lower, lowercase(s["id"])),
+        common_series,
+    )
 
     return first(filtered, limit)
 end

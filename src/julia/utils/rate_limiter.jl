@@ -24,7 +24,7 @@ mutable struct RateLimiter
     timestamps::Vector{DateTime}
     lock::ReentrantLock
 
-    function RateLimiter(limit::Int; window_seconds::Int=60)
+    function RateLimiter(limit::Int; window_seconds::Int = 60)
         new(limit, window_seconds, DateTime[], ReentrantLock())
     end
 end
@@ -63,7 +63,7 @@ Wait if necessary to respect rate limits, then record the request.
 # Returns
 - `Bool`: true if proceeded, false if max wait exceeded
 """
-function wait_if_needed(limiter::RateLimiter; max_wait::Int=120)::Bool
+function wait_if_needed(limiter::RateLimiter; max_wait::Int = 120)::Bool
     start_time = now()
 
     while !can_proceed(limiter)
