@@ -32,11 +32,7 @@ dates = [Date(2021, 1, 1), Date(2022, 1, 1), Date(2023, 1, 1)]
 growth = gdp_growth(values, dates, method=:yoy)
 ```
 """
-function gdp_growth(
-    values::Vector{Float64},
-    dates::Vector{Date};
-    method::Symbol = :yoy,
-)::Vector{Float64}
+function gdp_growth(values::Vector{Float64}, dates::Vector{Date}; method::Symbol=:yoy)::Vector{Float64}
     if length(values) != length(dates)
         throw(ArgumentError("Values and dates must have same length"))
     end
@@ -73,10 +69,10 @@ function growth_yoy(values::Vector{Float64}, dates::Vector{Date})::Vector{Float6
     n = length(values)
     growth_rates = Float64[]
 
-    for i = 2:n
+    for i in 2:n
         # Find value from approximately 1 year ago
         year_ago = dates[i] - Year(1)
-        prev_idx = findlast(d -> d <= year_ago, dates[1:(i-1)])
+        prev_idx = findlast(d -> d <= year_ago, dates[1:i-1])
 
         if prev_idx !== nothing
             prev_value = values[prev_idx]
@@ -105,10 +101,10 @@ function growth_qoq(values::Vector{Float64}, dates::Vector{Date})::Vector{Float6
     n = length(values)
     growth_rates = Float64[]
 
-    for i = 2:n
+    for i in 2:n
         # Find value from approximately 1 quarter ago
         quarter_ago = dates[i] - Month(3)
-        prev_idx = findlast(d -> d <= quarter_ago, dates[1:(i-1)])
+        prev_idx = findlast(d -> d <= quarter_ago, dates[1:i-1])
 
         if prev_idx !== nothing
             prev_value = values[prev_idx]
@@ -138,10 +134,10 @@ function growth_mom(values::Vector{Float64}, dates::Vector{Date})::Vector{Float6
     n = length(values)
     growth_rates = Float64[]
 
-    for i = 2:n
+    for i in 2:n
         # Find value from approximately 1 month ago
         month_ago = dates[i] - Month(1)
-        prev_idx = findlast(d -> d <= month_ago, dates[1:(i-1)])
+        prev_idx = findlast(d -> d <= month_ago, dates[1:i-1])
 
         if prev_idx !== nothing
             prev_value = values[prev_idx]
@@ -203,7 +199,7 @@ function simple_growth_rate(values::Vector{Float64})::Vector{Float64}
     n = length(values)
     growth_rates = Float64[]
 
-    for i = 2:n
+    for i in 2:n
         if values[i-1] != 0
             growth = ((values[i] - values[i-1]) / values[i-1]) * 100
             push!(growth_rates, growth)
@@ -243,16 +239,12 @@ Calculate real growth by adjusting for inflation using GDP deflator.
 # Returns
 - `Vector{Float64}`: Real GDP values
 """
-function real_growth(
-    nominal_values::Vector{Float64},
-    deflator::Vector{Float64},
-)::Vector{Float64}
+function real_growth(nominal_values::Vector{Float64}, deflator::Vector{Float64})::Vector{Float64}
     if length(nominal_values) != length(deflator)
         throw(ArgumentError("Nominal values and deflator must have same length"))
     end
 
-    real_values =
-        [nominal / (defl / 100) for (nominal, defl) in zip(nominal_values, deflator)]
+    real_values = [nominal / (defl / 100) for (nominal, defl) in zip(nominal_values, deflator)]
     return real_values
 end
 
@@ -269,10 +261,7 @@ gdp = [20000.0, 21000.0, 22000.0]
 contribution = contribution_to_growth(consumption, gdp)
 ```
 """
-function contribution_to_growth(
-    component_values::Vector{Float64},
-    total_values::Vector{Float64},
-)::Vector{Float64}
+function contribution_to_growth(component_values::Vector{Float64}, total_values::Vector{Float64})::Vector{Float64}
     if length(component_values) != length(total_values)
         throw(ArgumentError("Component and total must have same length"))
     end
@@ -280,7 +269,7 @@ function contribution_to_growth(
     n = length(component_values)
     contributions = Float64[]
 
-    for i = 2:n
+    for i in 2:n
         component_change = component_values[i] - component_values[i-1]
         prev_total = total_values[i-1]
 

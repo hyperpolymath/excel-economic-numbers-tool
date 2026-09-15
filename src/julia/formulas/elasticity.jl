@@ -37,11 +37,7 @@ quantities = [100.0, 90.0, 75.0]
 ε = elasticity(quantities, prices)  # Returns negative value (normal demand)
 ```
 """
-function elasticity(
-    quantities::Vector{Float64},
-    prices::Vector{Float64};
-    method::Symbol = :midpoint,
-)::Float64
+function elasticity(quantities::Vector{Float64}, prices::Vector{Float64}; method::Symbol=:midpoint)::Float64
     if length(quantities) != length(prices)
         throw(ArgumentError("Quantities and prices must have same length"))
     end
@@ -97,7 +93,7 @@ function elasticity_arc(quantities::Vector{Float64}, prices::Vector{Float64})::F
     n = length(quantities)
     elasticities = Float64[]
 
-    for i = 1:(n-1)
+    for i in 1:(n-1)
         q1, q2 = quantities[i], quantities[i+1]
         p1, p2 = prices[i], prices[i+1]
 
@@ -130,8 +126,8 @@ function elasticity_point(quantities::Vector{Float64}, prices::Vector{Float64}):
     p_mean = mean(prices)
     q_mean = mean(quantities)
 
-    numerator = sum((prices[i] - p_mean) * (quantities[i] - q_mean) for i = 1:n)
-    denominator = sum((prices[i] - p_mean)^2 for i = 1:n)
+    numerator = sum((prices[i] - p_mean) * (quantities[i] - q_mean) for i in 1:n)
+    denominator = sum((prices[i] - p_mean)^2 for i in 1:n)
 
     if denominator == 0
         return Inf
@@ -167,8 +163,8 @@ function elasticity_log(quantities::Vector{Float64}, prices::Vector{Float64})::F
     p_mean = mean(log_p)
     q_mean = mean(log_q)
 
-    numerator = sum((log_p[i] - p_mean) * (log_q[i] - q_mean) for i = 1:n)
-    denominator = sum((log_p[i] - p_mean)^2 for i = 1:n)
+    numerator = sum((log_p[i] - p_mean) * (log_q[i] - q_mean) for i in 1:n)
+    denominator = sum((log_p[i] - p_mean)^2 for i in 1:n)
 
     if denominator == 0
         return Inf
@@ -206,10 +202,7 @@ Calculate cross-price elasticity of demand.
   - ε_xy < 0: Complementary goods
   - ε_xy ≈ 0: Independent goods
 """
-function cross_price_elasticity(
-    quantities_x::Vector{Float64},
-    prices_y::Vector{Float64},
-)::Float64
+function cross_price_elasticity(quantities_x::Vector{Float64}, prices_y::Vector{Float64})::Float64
     return elasticity_midpoint(quantities_x, prices_y)
 end
 

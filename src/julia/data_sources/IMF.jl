@@ -36,13 +36,15 @@ struct IMFClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function IMFClient(; cache_ttl::Int = 86400)
+    function IMFClient(;
+        cache_ttl::Int=86400
+    )
         base_url = "http://dataservices.imf.org/REST/SDMX_JSON.svc"
 
         # IMF allows 60 requests per minute
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl = cache_ttl)
+        cache = SQLiteCache(default_ttl=cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -74,15 +76,8 @@ client = IMFClient()
 data = fetch_series(client, "IFS", "NGDP_R_SA_XDC", "Q", "US", Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(
-    client::IMFClient,
-    database::String,
-    indicator::String,
-    frequency::String,
-    area::String,
-    start_date::Date,
-    end_date::Date,
-)::DataFrame
+function fetch_series(client::IMFClient, database::String, indicator::String, frequency::String,
+                      area::String, start_date::Date, end_date::Date)::DataFrame
     # Check cache first
     key = cache_key("imf", database, indicator, frequency, area, start_date, end_date)
     cached = get_cached(client.cache, key)
@@ -113,10 +108,10 @@ function fetch_series(
 
         @debug "IMF: Making API request" url database indicator
 
-        response = HTTP.get(
-            url,
-            query = Dict("startPeriod" => start_period, "endPeriod" => end_period),
-        )
+        response = HTTP.get(url, query=Dict(
+            "startPeriod" => start_period,
+            "endPeriod" => end_period
+        ))
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -163,10 +158,10 @@ function fetch_series(
         # Convert to DataFrame
         if isempty(observations)
             @warn "IMF: No observations found in response" database indicator area
-            df = DataFrame(date = Date[], value = Union{Float64,Missing}[])
+            df = DataFrame(date=Date[], value=Union{Float64, Missing}[])
         else
             dates = Date[]
-            values = Union{Float64,Missing}[]
+            values = Union{Float64, Missing}[]
 
             for obs in observations
                 # Parse time period
@@ -186,7 +181,7 @@ function fetch_series(
                 end
             end
 
-            df = DataFrame(date = dates, value = values)
+            df = DataFrame(date=dates, value=values)
         end
 
         # Cache the result
@@ -194,12 +189,12 @@ function fetch_series(
             client.cache,
             key,
             JSON3.write(df),
-            metadata = Dict(
+            metadata=Dict(
                 "source" => "imf",
                 "database" => database,
                 "indicator" => indicator,
-                "area" => area,
-            ),
+                "area" => area
+            )
         )
 
         return df
@@ -275,12 +270,7 @@ client = IMFClient()
 results = search_series(client, "IFS", "GDP")
 ```
 """
-function search_series(
-    client::IMFClient,
-    database::String,
-    query::String;
-    limit::Int = 100,
-)::Vector{Dict}
+function search_series(client::IMFClient, database::String, query::String; limit::Int=100)::Vector{Dict}
     # Check cache
     key = cache_key("imf", "search:$database:$query")
     cached = get_cached(client.cache, key)
@@ -328,13 +318,12 @@ function search_series(
                 id = get(dataflow, Symbol("@id"), "")
 
                 # Filter by query (case-insensitive)
-                if isempty(query) ||
-                   occursin(lowercase(query), lowercase(description)) ||
-                   occursin(lowercase(query), lowercase(id))
-                    push!(
-                        results,
-                        Dict("id" => id, "title" => description, "database" => database),
-                    )
+                if isempty(query) || occursin(lowercase(query), lowercase(description)) || occursin(lowercase(query), lowercase(id))
+                    push!(results, Dict(
+                        "id" => id,
+                        "title" => description,
+                        "database" => database
+                    ))
 
                     if length(results) >= limit
                         break
@@ -351,8 +340,8 @@ function search_series(
         client.cache,
         key,
         JSON3.write(results),
-        ttl = 3600,  # Cache searches for 1 hour
-        metadata = Dict("source" => "imf", "type" => "search", "database" => database),
+        ttl=3600,  # Cache searches for 1 hour
+        metadata=Dict("source" => "imf", "type" => "search", "database" => database)
     )
 
     return results
@@ -395,25 +384,27 @@ function get_database_structure(client::IMFClient, database::String)::Dict
     data = JSON3.read(response.body)
 
     # Extract dimensions and code lists
-    structure_info = Dict("database" => database, "dimensions" => [], "codelists" => Dict())
+    structure_info = Dict(
+        "database" => database,
+        "dimensions" => [],
+        "codelists" => Dict()
+    )
 
     try
         if haskey(data, :Structure)
             struct_data = data.Structure
 
             # Extract dimensions
-            if haskey(struct_data, :KeyFamilies) &&
-               haskey(struct_data.KeyFamilies, :KeyFamily)
+            if haskey(struct_data, :KeyFamilies) && haskey(struct_data.KeyFamilies, :KeyFamily)
                 key_family = struct_data.KeyFamilies.KeyFamily
-                if haskey(key_family, :Components) &&
-                   haskey(key_family.Components, :Dimension)
+                if haskey(key_family, :Components) && haskey(key_family.Components, :Dimension)
                     dimensions = key_family.Components.Dimension
                     dim_array = isa(dimensions, AbstractVector) ? dimensions : [dimensions]
 
                     for dim in dim_array
                         dim_info = Dict(
                             "id" => get(dim, Symbol("@conceptRef"), ""),
-                            "codelist" => get(dim, Symbol("@codelist"), ""),
+                            "codelist" => get(dim, Symbol("@codelist"), "")
                         )
                         push!(structure_info["dimensions"], dim_info)
                     end
@@ -431,21 +422,18 @@ function get_database_structure(client::IMFClient, database::String)::Dict
 
                     if haskey(codelist, :Code)
                         code_items = codelist.Code
-                        code_array =
-                            isa(code_items, AbstractVector) ? code_items : [code_items]
+                        code_array = isa(code_items, AbstractVector) ? code_items : [code_items]
 
                         for code in code_array
                             code_value = get(code, Symbol("@value"), "")
                             description = get(code, :Description, Dict())
-                            desc_text =
-                                isa(description, AbstractVector) ? first(description) :
-                                description
+                            desc_text = isa(description, AbstractVector) ? first(description) : description
                             desc_value = get(desc_text, Symbol("#text"), "")
 
-                            push!(
-                                codes,
-                                Dict("value" => code_value, "description" => desc_value),
-                            )
+                            push!(codes, Dict(
+                                "value" => code_value,
+                                "description" => desc_value
+                            ))
                         end
                     end
 

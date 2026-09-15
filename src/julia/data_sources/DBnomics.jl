@@ -30,13 +30,15 @@ struct DBnomicsClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function DBnomicsClient(; cache_ttl::Int = 86400)
+    function DBnomicsClient(;
+        cache_ttl::Int=86400
+    )
         base_url = "https://api.db.nomics.world/v22"
 
         # DBnomics has higher rate limits (500/min)
         rate_limiter = RateLimiter(500)
 
-        cache = SQLiteCache(default_ttl = cache_ttl)
+        cache = SQLiteCache(default_ttl=cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -65,14 +67,7 @@ client = DBnomicsClient()
 data = fetch_series(client, "FRED", "series", "GDPC1", Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(
-    client::DBnomicsClient,
-    provider::String,
-    dataset::String,
-    series::String,
-    start_date::Date,
-    end_date::Date,
-)::DataFrame
+function fetch_series(client::DBnomicsClient, provider::String, dataset::String, series::String, start_date::Date, end_date::Date)::DataFrame
     # Check cache first
     series_id = "$provider/$dataset/$series"
     key = cache_key("dbnomics", series_id, start_date, end_date)
@@ -97,11 +92,14 @@ function fetch_series(
         # DBnomics API format: /series/{provider}/{dataset}/{series}
         url = "$(client.base_url)/series/$provider/$dataset/$series"
 
-        params = Dict("observations" => "1", "format" => "json")
+        params = Dict(
+            "observations" => "1",
+            "format" => "json"
+        )
 
         @debug "DBnomics: Making API request" url series_id
 
-        response = HTTP.get(url, query = params)
+        response = HTTP.get(url, query=params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -132,19 +130,19 @@ function fetch_series(
             end
         end
 
-        df = DataFrame(date = dates, value = values)
+        df = DataFrame(date=dates, value=values)
 
         # Cache the result
         set_cached(
             client.cache,
             key,
             JSON3.write(df),
-            metadata = Dict(
+            metadata=Dict(
                 "source" => "dbnomics",
                 "provider" => provider,
                 "dataset" => dataset,
-                "series" => series,
-            ),
+                "series" => series
+            )
         )
 
         return df
@@ -175,12 +173,7 @@ results = search_series(client, "GDP")
 results_fred = search_series(client, "GDP", provider="FRED")
 ```
 """
-function search_series(
-    client::DBnomicsClient,
-    query::String;
-    limit::Int = 100,
-    provider::Union{String,Nothing} = nothing,
-)::Vector{Dict}
+function search_series(client::DBnomicsClient, query::String; limit::Int=100, provider::Union{String, Nothing}=nothing)::Vector{Dict}
     # Check cache
     provider_key = provider === nothing ? "all" : provider
     key = cache_key("dbnomics", "search:$query:$provider_key")
@@ -197,7 +190,11 @@ function search_series(
     end
 
     # Build request
-    params = Dict("q" => query, "limit" => string(limit), "format" => "json")
+    params = Dict(
+        "q" => query,
+        "limit" => string(limit),
+        "format" => "json"
+    )
 
     if provider !== nothing
         params["provider_code"] = provider
@@ -206,7 +203,7 @@ function search_series(
     url = "$(client.base_url)/series"
 
     # Execute request
-    response = HTTP.get(url, query = params)
+    response = HTTP.get(url, query=params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -224,8 +221,9 @@ function search_series(
             "frequency" => get(series, :frequency, ""),
             "period_start" => get(series, :period_start_day, ""),
             "period_end" => get(series, :period_end_day, ""),
-            "last_update" => get(series, :indexed_at, ""),
-        ) for series in data.series.docs
+            "last_update" => get(series, :indexed_at, "")
+        )
+        for series in data.series.docs
     ]
 
     # Cache results
@@ -233,8 +231,8 @@ function search_series(
         client.cache,
         key,
         JSON3.write(results),
-        ttl = 3600,  # Cache searches for 1 hour
-        metadata = Dict("source" => "dbnomics", "type" => "search"),
+        ttl=3600,  # Cache searches for 1 hour
+        metadata=Dict("source" => "dbnomics", "type" => "search")
     )
 
     return results
@@ -260,12 +258,7 @@ client = DBnomicsClient()
 info = get_series_info(client, "FRED", "series", "GDPC1")
 ```
 """
-function get_series_info(
-    client::DBnomicsClient,
-    provider::String,
-    dataset::String,
-    series::String,
-)::Dict
+function get_series_info(client::DBnomicsClient, provider::String, dataset::String, series::String)::Dict
     # Rate limit
     if !wait_if_needed(client.rate_limiter)
         throw(ErrorException("Rate limit timeout"))
@@ -275,10 +268,10 @@ function get_series_info(
 
     params = Dict(
         "observations" => "0",  # Don't fetch observations, just metadata
-        "format" => "json",
+        "format" => "json"
     )
 
-    response = HTTP.get(url, query = params)
+    response = HTTP.get(url, query=params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -298,7 +291,7 @@ function get_series_info(
         "last_update" => get(series_data, :indexed_at, ""),
         "dimensions" => get(series_data, :dimensions, Dict()),
         "dataset_name" => get(series_data, :dataset_name, ""),
-        "provider_name" => get(series_data, :provider_name, ""),
+        "provider_name" => get(series_data, :provider_name, "")
     )
 end
 
@@ -338,7 +331,7 @@ function list_providers(client::DBnomicsClient)::Vector{Dict}
 
     params = Dict("format" => "json")
 
-    response = HTTP.get(url, query = params)
+    response = HTTP.get(url, query=params)
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -353,8 +346,9 @@ function list_providers(client::DBnomicsClient)::Vector{Dict}
             "name" => provider.name,
             "region" => get(provider, :region, ""),
             "website" => get(provider, :website, ""),
-            "datasets_count" => get(provider, :nb_datasets, 0),
-        ) for provider in data.providers.docs
+            "datasets_count" => get(provider, :nb_datasets, 0)
+        )
+        for provider in data.providers.docs
     ]
 
     # Cache providers list (24 hours)
@@ -362,8 +356,8 @@ function list_providers(client::DBnomicsClient)::Vector{Dict}
         client.cache,
         key,
         JSON3.write(providers),
-        ttl = 86400,
-        metadata = Dict("source" => "dbnomics", "type" => "providers"),
+        ttl=86400,
+        metadata=Dict("source" => "dbnomics", "type" => "providers")
     )
 
     return providers

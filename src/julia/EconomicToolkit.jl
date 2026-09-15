@@ -22,32 +22,11 @@ include("data_sources.jl")
 include("formulas.jl")
 
 export EconomicClient,
-    fetch_series,
-    search_series,
-    list_sources,
-    health,
-    # Data sources
-    DataSourceBase,
-    FRED,
-    WorldBank,
-    IMF,
-    OECD,
-    ECB,
-    BEA,
-    Census,
-    Eurostat,
-    BIS,
-    DBnomics,
-    source_id,
-    source_name,
-    datasource_fetch,
-    datasource_search,
-    # Formulas
-    elasticity,
-    gdp_growth,
-    gini_coefficient,
-    lorenz_curve,
-    cagr,
-    growth_rate
+       fetch_series, search_series, list_sources, health,
+       # Data sources
+       DataSourceBase, FRED, WorldBank, IMF, OECD, ECB, BEA, Census, Eurostat, BIS, DBnomics,
+       source_id, source_name, datasource_fetch, datasource_search,
+       # Formulas
+       elasticity, gdp_growth, gini_coefficient, lorenz_curve, cagr, growth_rate
 
 end # module EconomicToolkit

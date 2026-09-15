@@ -32,7 +32,7 @@ function elasticity(
         # Point elasticity: (dQ/dP) * (P/Q)
         dq = diff(q)
         dp = diff(p)
-        elasticities = (dq ./ dp) .* (p[1:(end-1)] ./ q[1:(end-1)])
+        elasticities = (dq ./ dp) .* (p[1:end-1] ./ q[1:end-1])
         return mean(elasticities)
 
     elseif method == "arc"
@@ -71,11 +71,14 @@ gdp_growth([100, 102, 105, 108])        # period-over-period rates
 gdp_growth([100, 110]; periods=1)        # annualized rate
 ```
 """
-function gdp_growth(gdp_values::Vector{<:Real}; periods::Union{Int,Nothing} = nothing)
+function gdp_growth(
+    gdp_values::Vector{<:Real};
+    periods::Union{Int, Nothing} = nothing,
+)
     vals = Float64.(gdp_values)
 
     # Period-over-period growth
-    growth_rates = diff(vals) ./ vals[1:(end-1)] .* 100.0
+    growth_rates = diff(vals) ./ vals[1:end-1] .* 100.0
 
     if periods === nothing
         return length(growth_rates) > 1 ? growth_rates : growth_rates[1]
@@ -108,7 +111,7 @@ function gini_coefficient(incomes::Vector{<:Real})::Float64
     n = length(sorted_incomes)
 
     cumulative_sum = cumsum(sorted_incomes)
-    indices = collect(0:(n-1))
+    indices = collect(0:n-1)
     weighted_sum = sum((n .- indices) .* sorted_incomes)
 
     return (2.0 * weighted_sum) / (n * cumulative_sum[end]) - (n + 1.0) / n
@@ -131,7 +134,7 @@ element is a `Vector{Float64}` starting from the origin (0, 0).
 pop, income = lorenz_curve([20000, 30000, 40000, 50000, 100000])
 ```
 """
-function lorenz_curve(incomes::Vector{<:Real})::Tuple{Vector{Float64},Vector{Float64}}
+function lorenz_curve(incomes::Vector{<:Real})::Tuple{Vector{Float64}, Vector{Float64}}
     sorted_incomes = sort(Float64.(incomes))
     n = length(sorted_incomes)
 
@@ -186,6 +189,6 @@ growth_rate([100, 105, 110])  # two growth rates
 """
 function growth_rate(values::Vector{<:Real})
     vals = Float64.(values)
-    rates = diff(vals) ./ vals[1:(end-1)] .* 100.0
+    rates = diff(vals) ./ vals[1:end-1] .* 100.0
     return length(rates) > 1 ? rates : rates[1]
 end

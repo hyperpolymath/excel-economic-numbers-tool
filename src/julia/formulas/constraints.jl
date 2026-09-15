@@ -44,10 +44,10 @@ Collection of constraints with variable values.
 """
 mutable struct ConstraintSystem
     constraints::Vector{Constraint}
-    variables::Dict{String,Float64}
+    variables::Dict{String, Float64}
     fixed::Set{String}
 
-    ConstraintSystem() = new(Constraint[], Dict{String,Float64}(), Set{String}())
+    ConstraintSystem() = new(Constraint[], Dict{String, Float64}(), Set{String}())
 end
 
 """
@@ -66,14 +66,8 @@ add_constraint(system, "GDP_identity", "GDP = C + I + G + NX",
                0.0)
 ```
 """
-function add_constraint(
-    system::ConstraintSystem,
-    name::String,
-    equation::String,
-    variables::Vector{String},
-    coefficients::Vector{Float64},
-    rhs::Float64,
-)
+function add_constraint(system::ConstraintSystem, name::String, equation::String,
+                        variables::Vector{String}, coefficients::Vector{Float64}, rhs::Float64)
     if length(variables) != length(coefficients)
         throw(ArgumentError("Variables and coefficients must have same length"))
     end
@@ -93,12 +87,7 @@ Set a variable value in the system.
 - `value::Float64`: Variable value
 - `fixed::Bool`: If true, this variable won't be changed by solver
 """
-function set_variable(
-    system::ConstraintSystem,
-    var::String,
-    value::Float64;
-    fixed::Bool = false,
-)
+function set_variable(system::ConstraintSystem, var::String, value::Float64; fixed::Bool=false)
     system.variables[var] = value
 
     if fixed
@@ -111,7 +100,7 @@ end
 
 Get a variable value from the system.
 """
-function get_variable(system::ConstraintSystem, var::String)::Union{Float64,Nothing}
+function get_variable(system::ConstraintSystem, var::String)::Union{Float64, Nothing}
     return get(system.variables, var, nothing)
 end
 
@@ -130,11 +119,7 @@ Uses iterative method to satisfy all constraints while respecting fixed variable
 # Returns
 - `Bool`: true if converged, false otherwise
 """
-function solve_constraints(
-    system::ConstraintSystem;
-    max_iterations::Int = 100,
-    tolerance::Float64 = 1e-6,
-)::Bool
+function solve_constraints(system::ConstraintSystem; max_iterations::Int=100, tolerance::Float64=1e-6)::Bool
     if isempty(system.constraints)
         return true
     end
@@ -165,7 +150,7 @@ function solve_constraints(
     end
 
     # Iterative solver (Gauss-Seidel style)
-    for iteration = 1:max_iterations
+    for iteration in 1:max_iterations
         max_change = 0.0
 
         for constraint in system.constraints
@@ -223,7 +208,7 @@ Check if all constraints are currently satisfied.
 # Returns
 - `Bool`: true if all constraints satisfied, false otherwise
 """
-function check_constraints(system::ConstraintSystem, tolerance::Float64 = 1e-6)::Bool
+function check_constraints(system::ConstraintSystem, tolerance::Float64=1e-6)::Bool
     all_satisfied = true
 
     for constraint in system.constraints
@@ -261,40 +246,34 @@ solve_constraints(system)
 gdp = get_variable(system, "GDP")  # Returns 20000.0
 ```
 """
-function gdp_identity_system(;
-    C::Union{Float64,Nothing} = nothing,
-    I::Union{Float64,Nothing} = nothing,
-    G::Union{Float64,Nothing} = nothing,
-    NX::Union{Float64,Nothing} = nothing,
-    GDP::Union{Float64,Nothing} = nothing,
-)::ConstraintSystem
+function gdp_identity_system(; C::Union{Float64, Nothing}=nothing,
+                               I::Union{Float64, Nothing}=nothing,
+                               G::Union{Float64, Nothing}=nothing,
+                               NX::Union{Float64, Nothing}=nothing,
+                               GDP::Union{Float64, Nothing}=nothing)::ConstraintSystem
     system = ConstraintSystem()
 
     # Add constraint: GDP - C - I - G - NX = 0
-    add_constraint(
-        system,
-        "GDP_identity",
-        "GDP = C + I + G + NX",
-        ["GDP", "C", "I", "G", "NX"],
-        [1.0, -1.0, -1.0, -1.0, -1.0],
-        0.0,
-    )
+    add_constraint(system, "GDP_identity", "GDP = C + I + G + NX",
+                   ["GDP", "C", "I", "G", "NX"],
+                   [1.0, -1.0, -1.0, -1.0, -1.0],
+                   0.0)
 
     # Set known values
     if C !== nothing
-        set_variable(system, "C", C, fixed = true)
+        set_variable(system, "C", C, fixed=true)
     end
     if I !== nothing
-        set_variable(system, "I", I, fixed = true)
+        set_variable(system, "I", I, fixed=true)
     end
     if G !== nothing
-        set_variable(system, "G", G, fixed = true)
+        set_variable(system, "G", G, fixed=true)
     end
     if NX !== nothing
-        set_variable(system, "NX", NX, fixed = true)
+        set_variable(system, "NX", NX, fixed=true)
     end
     if GDP !== nothing
-        set_variable(system, "GDP", GDP, fixed = true)
+        set_variable(system, "GDP", GDP, fixed=true)
     end
 
     return system

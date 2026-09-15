@@ -39,13 +39,13 @@ struct ECBClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function ECBClient(; cache_ttl::Int = 86400)
+    function ECBClient(; cache_ttl::Int=86400)
         base_url = "https://data-api.ecb.europa.eu/service"
 
         # ECB rate limit is 60 requests per minute
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl = cache_ttl)
+        cache = SQLiteCache(default_ttl=cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -68,7 +68,7 @@ function parse_sdmx_data(xml_content::String)::DataFrame
     root = LightXML.root(doc)
 
     dates = Date[]
-    values = Union{Float64,Missing}[]
+    values = Union{Float64, Missing}[]
 
     # Navigate SDMX structure: DataSet -> Series -> Obs
     # SDMX namespaces can vary, so we search for elements
@@ -124,7 +124,7 @@ function parse_sdmx_data(xml_content::String)::DataFrame
     # Sort by date
     perm = sortperm(dates)
 
-    return DataFrame(date = dates[perm], value = values[perm])
+    return DataFrame(date=dates[perm], value=values[perm])
 end
 
 """
@@ -152,13 +152,7 @@ data = fetch_series(client, "EXR", "D.USD.EUR.SP00.A", Date(2020, 1, 1), Date(20
 data = fetch_series(client, "ICP", "M.U2.N.000000.4.ANR", Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(
-    client::ECBClient,
-    flow::String,
-    key::String,
-    start_date::Date,
-    end_date::Date,
-)::DataFrame
+function fetch_series(client::ECBClient, flow::String, key::String, start_date::Date, end_date::Date)::DataFrame
     # Check cache first
     cache_id = cache_key("ecb", flow, key, start_date, end_date)
     cached = get_cached(client.cache, cache_id)
@@ -184,12 +178,12 @@ function fetch_series(
         params = Dict(
             "startPeriod" => Dates.format(start_date, "yyyy-mm-dd"),
             "endPeriod" => Dates.format(end_date, "yyyy-mm-dd"),
-            "format" => "sdmx-ml",  # SDMX-ML XML format
+            "format" => "sdmx-ml"  # SDMX-ML XML format
         )
 
         @debug "ECB: Making API request" url flow key
 
-        response = HTTP.get(url, query = params)
+        response = HTTP.get(url, query=params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -199,8 +193,7 @@ function fetch_series(
     end
 
     # Execute with retry and cache fallback
-    body, from_cache =
-        with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
+    body, from_cache = with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
 
     if !from_cache
         # Parse fresh response
@@ -212,7 +205,7 @@ function fetch_series(
             client.cache,
             cache_id,
             JSON3.write(df),
-            metadata = Dict("source" => "ecb", "flow" => flow, "key" => key),
+            metadata=Dict("source" => "ecb", "flow" => flow, "key" => key)
         )
 
         return df
@@ -246,12 +239,7 @@ results = search_series(client, "EXR", "USD")
 results = search_series(client, "ICP", "inflation")
 ```
 """
-function search_series(
-    client::ECBClient,
-    flow::String,
-    query::String;
-    limit::Int = 100,
-)::Vector{Dict}
+function search_series(client::ECBClient, flow::String, query::String; limit::Int=100)::Vector{Dict}
     # Check cache
     cache_id = cache_key("ecb", "search:$flow:$query")
     cached = get_cached(client.cache, cache_id)
@@ -299,17 +287,13 @@ function search_series(
             description = desc_elem !== nothing ? content(desc_elem) : ""
 
             # Filter by query
-            if occursin(query_lower, lowercase(description)) ||
-               occursin(query_lower, lowercase(code_id))
-                push!(
-                    results,
-                    Dict(
-                        "flow" => flow,
-                        "code" => code_id,
-                        "codelist" => codelist_id,
-                        "description" => description,
-                    ),
-                )
+            if occursin(query_lower, lowercase(description)) || occursin(query_lower, lowercase(code_id))
+                push!(results, Dict(
+                    "flow" => flow,
+                    "code" => code_id,
+                    "codelist" => codelist_id,
+                    "description" => description
+                ))
 
                 if length(results) >= limit
                     break
@@ -329,8 +313,8 @@ function search_series(
         client.cache,
         cache_id,
         JSON3.write(results),
-        ttl = 3600,  # Cache searches for 1 hour
-        metadata = Dict("source" => "ecb", "type" => "search", "flow" => flow),
+        ttl=3600,  # Cache searches for 1 hour
+        metadata=Dict("source" => "ecb", "type" => "search", "flow" => flow)
     )
 
     return results
@@ -389,7 +373,10 @@ function get_dataflows(client::ECBClient)::Vector{Dict}
         name_elem = find_element(dataflow, "Name")
         name = name_elem !== nothing ? content(name_elem) : ""
 
-        push!(flows, Dict("id" => flow_id, "name" => name))
+        push!(flows, Dict(
+            "id" => flow_id,
+            "name" => name
+        ))
     end
 
     free(doc)
@@ -399,8 +386,8 @@ function get_dataflows(client::ECBClient)::Vector{Dict}
         client.cache,
         cache_id,
         JSON3.write(flows),
-        ttl = 86400,
-        metadata = Dict("source" => "ecb", "type" => "dataflows"),
+        ttl=86400,
+        metadata=Dict("source" => "ecb", "type" => "dataflows")
     )
 
     return flows
@@ -447,7 +434,11 @@ function get_series_info(client::ECBClient, flow::String, key::String)::Dict
     # Parse key components (e.g., "D.USD.EUR.SP00.A" -> [D, USD, EUR, SP00, A])
     key_parts = split(key, ".")
 
-    info = Dict("flow" => flow, "key" => key, "dimensions" => Dict[])
+    info = Dict(
+        "flow" => flow,
+        "key" => key,
+        "dimensions" => Dict[]
+    )
 
     # Extract dimension definitions
     dimension_idx = 1
@@ -458,14 +449,11 @@ function get_series_info(client::ECBClient, flow::String, key::String)::Dict
             name_elem = find_element(dimension, "Name")
             dim_name = name_elem !== nothing ? content(name_elem) : dim_id
 
-            push!(
-                info["dimensions"],
-                Dict(
-                    "id" => dim_id,
-                    "name" => dim_name,
-                    "value" => key_parts[dimension_idx],
-                ),
-            )
+            push!(info["dimensions"], Dict(
+                "id" => dim_id,
+                "name" => dim_name,
+                "value" => key_parts[dimension_idx]
+            ))
 
             dimension_idx += 1
         end

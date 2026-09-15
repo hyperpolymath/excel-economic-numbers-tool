@@ -28,11 +28,11 @@ struct RetryConfig
     retry_on::Vector{Int}
 
     function RetryConfig(;
-        max_retries::Int = 3,
-        initial_delay::Float64 = 2.0,
-        max_delay::Float64 = 32.0,
-        backoff_factor::Float64 = 2.0,
-        retry_on::Vector{Int} = [429, 500, 502, 503, 504],
+        max_retries::Int=3,
+        initial_delay::Float64=2.0,
+        max_delay::Float64=32.0,
+        backoff_factor::Float64=2.0,
+        retry_on::Vector{Int}=[429, 500, 502, 503, 504]
     )
         new(max_retries, initial_delay, max_delay, backoff_factor, retry_on)
     end
@@ -101,10 +101,10 @@ Execute function with retry logic and exponential backoff.
 # Throws
 - Last exception if all retries exhausted
 """
-function with_retry(f::Function, config::RetryConfig = RetryConfig())
+function with_retry(f::Function, config::RetryConfig=RetryConfig())
     last_exception = nothing
 
-    for attempt = 1:(config.max_retries+1)
+    for attempt in 1:(config.max_retries + 1)
         try
             return f()
         catch e
@@ -147,12 +147,7 @@ Execute function with retry logic, falling back to cache on final failure.
 # Returns
 - Tuple of (result, from_cache::Bool)
 """
-function with_retry_and_cache(
-    f::Function,
-    cache::SQLiteCache,
-    cache_key::String,
-    config::RetryConfig = RetryConfig(),
-)
+function with_retry_and_cache(f::Function, cache::SQLiteCache, cache_key::String, config::RetryConfig=RetryConfig())
     try
         result = with_retry(f, config)
         return (result, false)

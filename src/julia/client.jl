@@ -19,15 +19,15 @@ client = EconomicClient(api_url="https://api.example.com", api_key="my-key")
 """
 mutable struct EconomicClient
     api_url::String
-    api_key::Union{String,Nothing}
-    headers::Dict{String,String}
+    api_key::Union{String, Nothing}
+    headers::Dict{String, String}
 
     function EconomicClient(;
         api_url::String = "http://localhost:8080",
-        api_key::Union{String,Nothing} = nothing,
+        api_key::Union{String, Nothing} = nothing,
     )
         url = rstrip(api_url, '/')
-        headers = Dict{String,String}("Content-Type" => "application/json")
+        headers = Dict{String, String}("Content-Type" => "application/json")
         if api_key !== nothing
             headers["Authorization"] = "Bearer $api_key"
         end
@@ -54,10 +54,10 @@ function fetch_series(
     client::EconomicClient,
     source::String,
     series_id::String;
-    start_date::Union{Date,Nothing} = nothing,
-    end_date::Union{Date,Nothing} = nothing,
+    start_date::Union{Date, Nothing} = nothing,
+    end_date::Union{Date, Nothing} = nothing,
 )::Dict
-    params = Dict{String,String}()
+    params = Dict{String, String}()
     if start_date !== nothing
         params["start"] = string(start_date)
     end
@@ -88,7 +88,11 @@ Search for economic data series.
 # Returns
 A `Vector` of matching series dictionaries.
 """
-function search_series(client::EconomicClient, source::String, query::String)::Vector
+function search_series(
+    client::EconomicClient,
+    source::String,
+    query::String,
+)::Vector
     url = "$(client.api_url)/api/v1/sources/$source/search?q=$(HTTP.escapeuri(query))"
     response = HTTP.get(url, client.headers)
     return JSON3.read(String(response.body), Vector)
