@@ -41,13 +41,13 @@ struct EurostatClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function EurostatClient(; cache_ttl::Int=86400)
+    function EurostatClient(; cache_ttl::Int = 86400)
         base_url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1"
 
         # Rate limit: 60 requests per minute
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -72,7 +72,7 @@ function parse_eurostat_sdmx(xml_content::String)::DataFrame
     root = LightXML.root(doc)
 
     dates = Date[]
-    values = Union{Float64, Missing}[]
+    values = Union{Float64,Missing}[]
 
     # Navigate SDMX structure: DataSet -> Series -> Obs
     # Eurostat SDMX namespaces: "message" -> "DataSet" -> "Series" -> "Obs"
@@ -115,9 +115,9 @@ function parse_eurostat_sdmx(xml_content::String)::DataFrame
     # Sort by date
     if !isempty(dates)
         perm = sortperm(dates)
-        return DataFrame(date=dates[perm], value=values[perm])
+        return DataFrame(date = dates[perm], value = values[perm])
     else
-        return DataFrame(date=Date[], value=Union{Float64, Missing}[])
+        return DataFrame(date = Date[], value = Union{Float64,Missing}[])
     end
 end
 
@@ -182,8 +182,13 @@ data = fetch_series(client, "prc_hicp_midx", "M.CP00.EA19",
                    Date(2020, 1, 1), Date(2023, 12, 31))
 ```
 """
-function fetch_series(client::EurostatClient, dataset_code::String, filter::String,
-                     start_date::Date, end_date::Date)::DataFrame
+function fetch_series(
+    client::EurostatClient,
+    dataset_code::String,
+    filter::String,
+    start_date::Date,
+    end_date::Date,
+)::DataFrame
     # Check cache first
     cache_id = cache_key("eurostat", dataset_code, filter, start_date, end_date)
     cached = get_cached(client.cache, cache_id)
@@ -209,12 +214,12 @@ function fetch_series(client::EurostatClient, dataset_code::String, filter::Stri
         params = Dict(
             "startPeriod" => Dates.format(start_date, "yyyy-mm-dd"),
             "endPeriod" => Dates.format(end_date, "yyyy-mm-dd"),
-            "format" => "sdmx-ml"  # SDMX-ML XML format
+            "format" => "sdmx-ml",  # SDMX-ML XML format
         )
 
         @debug "Eurostat: Making API request" url dataset_code filter
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -224,7 +229,8 @@ function fetch_series(client::EurostatClient, dataset_code::String, filter::Stri
     end
 
     # Execute with retry and cache fallback
-    body, from_cache = with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
+    body, from_cache =
+        with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
 
     if !from_cache
         # Parse fresh response
@@ -267,7 +273,11 @@ results = search_series(client, "GDP")
 results = search_series(client, "unemployment", limit=50)
 ```
 """
-function search_series(client::EurostatClient, query::String; limit::Int=100)::Vector{Dict}
+function search_series(
+    client::EurostatClient,
+    query::String;
+    limit::Int = 100,
+)::Vector{Dict}
     # Check cache first
     cache_id = cache_key("eurostat_search", query, limit)
     cached = get_cached(client.cache, cache_id)
@@ -290,13 +300,11 @@ function search_series(client::EurostatClient, query::String; limit::Int=100)::V
         # Eurostat search uses dataflow catalog
         url = "$(client.base_url)/dataflow/ESTAT/all/latest"
 
-        params = Dict(
-            "format" => "json"
-        )
+        params = Dict("format" => "json")
 
         @debug "Eurostat: Making search API request" url query
 
-        response = HTTP.get(url, query=params)
+        response = HTTP.get(url, query = params)
 
         if response.status != 200
             throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -306,7 +314,8 @@ function search_series(client::EurostatClient, query::String; limit::Int=100)::V
     end
 
     # Execute with retry
-    body, from_cache = with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
+    body, from_cache =
+        with_retry_and_cache(fetch, client.cache, cache_id, client.retry_config)
 
     if !from_cache
         # Parse JSON response
@@ -321,13 +330,17 @@ function search_series(client::EurostatClient, query::String; limit::Int=100)::V
                 name = get(dataflow, :name, "")
                 id = get(dataflow, :id, "")
 
-                if occursin(lowercase(query), lowercase(name)) || occursin(lowercase(query), lowercase(id))
-                    push!(results, Dict(
-                        "id" => id,
-                        "name" => name,
-                        "description" => get(dataflow, :description, ""),
-                        "source" => "eurostat"
-                    ))
+                if occursin(lowercase(query), lowercase(name)) ||
+                   occursin(lowercase(query), lowercase(id))
+                    push!(
+                        results,
+                        Dict(
+                            "id" => id,
+                            "name" => name,
+                            "description" => get(dataflow, :description, ""),
+                            "source" => "eurostat",
+                        ),
+                    )
 
                     if length(results) >= limit
                         break
@@ -366,8 +379,8 @@ client = EurostatClient()
 datasets = list_datasets(client, limit=100)
 ```
 """
-function list_datasets(client::EurostatClient; limit::Int=1000)::Vector{Dict}
-    return search_series(client, "", limit=limit)
+function list_datasets(client::EurostatClient; limit::Int = 1000)::Vector{Dict}
+    return search_series(client, "", limit = limit)
 end
 
 export EurostatClient, fetch_series, search_series, list_datasets

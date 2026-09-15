@@ -26,15 +26,12 @@ end
 """
 Try to consume tokens from the bucket.
 """
-function try_consume!(bucket::TokenBucket, tokens::Int=1)::Bool
+function try_consume!(bucket::TokenBucket, tokens::Int = 1)::Bool
     current_time = now()
     time_passed = (current_time - bucket.last_update).value / 1000.0  # seconds
 
     # Refill tokens based on time passed
-    bucket.tokens = min(
-        bucket.capacity,
-        bucket.tokens + time_passed * bucket.fill_rate
-    )
+    bucket.tokens = min(bucket.capacity, bucket.tokens + time_passed * bucket.fill_rate)
     bucket.last_update = current_time
 
     # Try to consume tokens
@@ -50,12 +47,12 @@ end
 Rate limiter middleware.
 """
 struct RateLimiter
-    buckets::Dict{String, TokenBucket}
+    buckets::Dict{String,TokenBucket}
     requests_per_minute::Int
     enabled::Bool
 
-    function RateLimiter(requests_per_minute::Int=60; enabled::Bool=true)
-        new(Dict{String, TokenBucket}(), requests_per_minute, enabled)
+    function RateLimiter(requests_per_minute::Int = 60; enabled::Bool = true)
+        new(Dict{String,TokenBucket}(), requests_per_minute, enabled)
     end
 end
 
@@ -66,7 +63,7 @@ function get_bucket!(limiter::RateLimiter, client_id::String)::TokenBucket
     if !haskey(limiter.buckets, client_id)
         limiter.buckets[client_id] = TokenBucket(
             limiter.requests_per_minute,
-            limiter.requests_per_minute / 60.0  # tokens per second
+            limiter.requests_per_minute / 60.0,  # tokens per second
         )
     end
     return limiter.buckets[client_id]
@@ -76,8 +73,8 @@ end
 Middleware function for rate limiting.
 """
 function rate_limit(limiter::RateLimiter)
-    return function(handler)
-        return function(req::HTTP.Request)
+    return function (handler)
+        return function (req::HTTP.Request)
             if !limiter.enabled
                 return handler(req)
             end
@@ -88,11 +85,16 @@ function rate_limit(limiter::RateLimiter)
             bucket = get_bucket!(limiter, client_id)
 
             if !try_consume!(bucket)
-                return HTTP.Response(429, JSON3.write(Dict(
-                    "error" => "Too Many Requests",
-                    "message" => "Rate limit exceeded. Try again later.",
-                    "retry_after" => 60
-                )))
+                return HTTP.Response(
+                    429,
+                    JSON3.write(
+                        Dict(
+                            "error" => "Too Many Requests",
+                            "message" => "Rate limit exceeded. Try again later.",
+                            "retry_after" => 60,
+                        ),
+                    ),
+                )
             end
 
             return handler(req)

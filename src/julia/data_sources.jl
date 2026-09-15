@@ -40,8 +40,8 @@ A `Dict` with series data.
 function datasource_fetch(
     ds::DataSourceBase,
     series_id::String;
-    start_date::Union{Date, Nothing} = nothing,
-    end_date::Union{Date, Nothing} = nothing,
+    start_date::Union{Date,Nothing} = nothing,
+    end_date::Union{Date,Nothing} = nothing,
 )::Dict
     return fetch_series(ds.client, source_id(ds), series_id; start_date, end_date)
 end
