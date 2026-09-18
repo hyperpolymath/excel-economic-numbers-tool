@@ -23,7 +23,10 @@ struct SQLiteCache
     db::SQLite.DB
     default_ttl::Int
 
-    function SQLiteCache(db_path::String=joinpath(homedir(), ".economic-toolkit", "cache", "data.db"); default_ttl::Int=86400)
+    function SQLiteCache(
+        db_path::String = joinpath(homedir(), ".economic-toolkit", "cache", "data.db");
+        default_ttl::Int = 86400,
+    )
         # Ensure directory exists
         mkpath(dirname(db_path))
 
@@ -31,22 +34,28 @@ struct SQLiteCache
         db = SQLite.DB(db_path)
 
         # Create table if not exists
-        SQLite.execute(db, """
-            CREATE TABLE IF NOT EXISTS cache (
-                key TEXT PRIMARY KEY,
-                value TEXT NOT NULL,
-                created_at INTEGER NOT NULL,
-                expires_at INTEGER NOT NULL,
-                source TEXT,
-                series_id TEXT,
-                metadata TEXT
-            )
-        """)
+        SQLite.execute(
+            db,
+            """
+    CREATE TABLE IF NOT EXISTS cache (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        expires_at INTEGER NOT NULL,
+        source TEXT,
+        series_id TEXT,
+        metadata TEXT
+    )
+""",
+        )
 
         # Create index on expires_at for efficient cleanup
-        SQLite.execute(db, """
-            CREATE INDEX IF NOT EXISTS idx_expires_at ON cache(expires_at)
-        """)
+        SQLite.execute(
+            db,
+            """
+    CREATE INDEX IF NOT EXISTS idx_expires_at ON cache(expires_at)
+""",
+        )
 
         new(db, default_ttl)
     end
@@ -66,7 +75,12 @@ Generate a cache key from request parameters.
 # Returns
 - `String`: SHA256 hash of parameters
 """
-function cache_key(source::String, series_id::String, start_date::Date, end_date::Date)::String
+function cache_key(
+    source::String,
+    series_id::String,
+    start_date::Date,
+    end_date::Date,
+)::String
     data = "$source|$series_id|$start_date|$end_date"
     return bytes2hex(sha256(data))
 end
@@ -100,13 +114,17 @@ Retrieve cached value if it exists and hasn't expired.
 # Returns
 - `Union{String, Nothing}`: Cached value or nothing if not found/expired
 """
-function get_cached(cache::SQLiteCache, key::String)::Union{String, Nothing}
+function get_cached(cache::SQLiteCache, key::String)::Union{String,Nothing}
     now_unix = Int(floor(datetime2unix(now())))
 
-    result = DBInterface.execute(cache.db, """
-        SELECT value FROM cache
-        WHERE key = ? AND expires_at > ?
-    """, (key, now_unix))
+    result = DBInterface.execute(
+        cache.db,
+        """
+    SELECT value FROM cache
+    WHERE key = ? AND expires_at > ?
+""",
+        (key, now_unix),
+    )
 
     row = first(result, nothing)
     return row === nothing ? nothing : row.value
@@ -124,7 +142,13 @@ Store value in cache with optional TTL.
 - `ttl::Union{Int, Nothing}`: TTL in seconds (uses default if nothing)
 - `metadata::Dict`: Additional metadata (source, series_id, etc.)
 """
-function set_cached(cache::SQLiteCache, key::String, value::String; ttl::Union{Int, Nothing}=nothing, metadata::Dict=Dict())
+function set_cached(
+    cache::SQLiteCache,
+    key::String,
+    value::String;
+    ttl::Union{Int,Nothing} = nothing,
+    metadata::Dict = Dict(),
+)
     ttl_seconds = ttl === nothing ? cache.default_ttl : ttl
     now_unix = Int(floor(datetime2unix(now())))
     expires_at = now_unix + ttl_seconds
@@ -134,10 +158,14 @@ function set_cached(cache::SQLiteCache, key::String, value::String; ttl::Union{I
     metadata_json = JSON3.write(metadata)
 
     # Use INSERT OR REPLACE for upsert behavior
-    SQLite.execute(cache.db, """
-        INSERT OR REPLACE INTO cache (key, value, created_at, expires_at, source, series_id, metadata)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (key, value, now_unix, expires_at, source, series_id, metadata_json))
+    SQLite.execute(
+        cache.db,
+        """
+    INSERT OR REPLACE INTO cache (key, value, created_at, expires_at, source, series_id, metadata)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+""",
+        (key, value, now_unix, expires_at, source, series_id, metadata_json),
+    )
 end
 
 """
@@ -166,7 +194,8 @@ Remove expired entries from cache.
 """
 function clear_expired(cache::SQLiteCache)::Int
     now_unix = Int(floor(datetime2unix(now())))
-    result = SQLite.execute(cache.db, "DELETE FROM cache WHERE expires_at <= ?", (now_unix,))
+    result =
+        SQLite.execute(cache.db, "DELETE FROM cache WHERE expires_at <= ?", (now_unix,))
     return SQLite.changes(cache.db)
 end
 
@@ -201,17 +230,27 @@ function get_stats(cache::SQLiteCache)::Dict
     now_unix = Int(floor(datetime2unix(now())))
 
     # Total entries
-    total = first(DBInterface.execute(cache.db, "SELECT COUNT(*) as count FROM cache")).count
+    total =
+        first(DBInterface.execute(cache.db, "SELECT COUNT(*) as count FROM cache")).count
 
     # Active (not expired) entries
-    active = first(DBInterface.execute(cache.db, "SELECT COUNT(*) as count FROM cache WHERE expires_at > ?", (now_unix,))).count
+    active = first(
+        DBInterface.execute(
+            cache.db,
+            "SELECT COUNT(*) as count FROM cache WHERE expires_at > ?",
+            (now_unix,),
+        ),
+    ).count
 
     # Expired entries
     expired = total - active
 
     # Entries by source
-    by_source = Dict{String, Int}()
-    for row in DBInterface.execute(cache.db, "SELECT source, COUNT(*) as count FROM cache WHERE source != '' GROUP BY source")
+    by_source = Dict{String,Int}()
+    for row in DBInterface.execute(
+        cache.db,
+        "SELECT source, COUNT(*) as count FROM cache WHERE source != '' GROUP BY source",
+    )
         by_source[row.source] = row.count
     end
 
@@ -224,7 +263,7 @@ function get_stats(cache::SQLiteCache)::Dict
         "expired" => expired,
         "by_source" => by_source,
         "db_size_bytes" => db_size,
-        "db_size_mb" => round(db_size / 1024 / 1024, digits=2)
+        "db_size_mb" => round(db_size / 1024 / 1024, digits = 2),
     )
 end
 

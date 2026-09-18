@@ -37,13 +37,13 @@ struct OECDClient
     cache::SQLiteCache
     retry_config::RetryConfig
 
-    function OECDClient(; cache_ttl::Int=86400)
+    function OECDClient(; cache_ttl::Int = 86400)
         base_url = "https://stats.oecd.org/SDMX-JSON/data"
 
         # OECD rate limit: 60 requests per minute, no API key required
         rate_limiter = RateLimiter(60)
 
-        cache = SQLiteCache(default_ttl=cache_ttl)
+        cache = SQLiteCache(default_ttl = cache_ttl)
         retry_config = RetryConfig()
 
         new(base_url, rate_limiter, cache, retry_config)
@@ -85,7 +85,7 @@ function parse_sdmx_json(data::JSON3.Object)::DataFrame
 
     # Extract data from first dataset
     if !haskey(data, :dataSets) || isempty(data.dataSets)
-        return DataFrame(date=Date[], value=Float64[])
+        return DataFrame(date = Date[], value = Float64[])
     end
 
     dataset = first(data.dataSets)
@@ -125,7 +125,7 @@ function parse_sdmx_json(data::JSON3.Object)::DataFrame
 
     # Sort by date
     perm = sortperm(dates)
-    return DataFrame(date=dates[perm], value=values[perm])
+    return DataFrame(date = dates[perm], value = values[perm])
 end
 
 """
@@ -203,14 +203,17 @@ data = fetch_series(client, "QNA", "USA.B1_GE.CUR.Q", Date(2020, 1, 1), Date(202
 function fetch_series(
     client::OECDClient,
     dataset::String,
-    filter_expr::String="all",
-    start_date::Union{Date, Nothing}=nothing,
-    end_date::Union{Date, Nothing}=nothing
+    filter_expr::String = "all",
+    start_date::Union{Date,Nothing} = nothing,
+    end_date::Union{Date,Nothing} = nothing,
 )::DataFrame
     # Build cache key
-    key = cache_key("oecd", "$dataset/$filter_expr",
-                    something(start_date, Date(1900, 1, 1)),
-                    something(end_date, Date(2100, 12, 31)))
+    key = cache_key(
+        "oecd",
+        "$dataset/$filter_expr",
+        something(start_date, Date(1900, 1, 1)),
+        something(end_date, Date(2100, 12, 31)),
+    )
 
     # Check cache first
     cached = get_cached(client.cache, key)
@@ -234,7 +237,7 @@ function fetch_series(
         url = "$(client.base_url)/$dataset/$filter_expr/all"
 
         # Build query parameters
-        params = Dict{String, String}()
+        params = Dict{String,String}()
 
         # Add date filters if provided
         if start_date !== nothing || end_date !== nothing
@@ -256,7 +259,11 @@ function fetch_series(
         response = if isempty(params)
             HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"])
         else
-            HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"], query=params)
+            HTTP.get(
+                url,
+                ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"],
+                query = params,
+            )
         end
 
         if response.status != 200
@@ -281,7 +288,11 @@ function fetch_series(
             client.cache,
             key,
             JSON3.write(df),
-            metadata=Dict("source" => "oecd", "dataset" => dataset, "filter" => filter_expr)
+            metadata = Dict(
+                "source" => "oecd",
+                "dataset" => dataset,
+                "filter" => filter_expr,
+            ),
         )
 
         return df
@@ -313,7 +324,7 @@ client = OECDClient()
 info = search_series(client, "QNA")
 ```
 """
-function search_series(client::OECDClient, dataset::String; limit::Int=100)::Vector{Dict}
+function search_series(client::OECDClient, dataset::String; limit::Int = 100)::Vector{Dict}
     # Check cache
     key = cache_key("oecd", "structure:$dataset")
     cached = get_cached(client.cache, key)
@@ -333,7 +344,8 @@ function search_series(client::OECDClient, dataset::String; limit::Int=100)::Vec
 
     @debug "OECD: Fetching dataset structure" url dataset
 
-    response = HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"])
+    response =
+        HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"])
 
     if response.status != 200
         throw(HTTP.Exceptions.StatusError(response.status, response))
@@ -342,7 +354,7 @@ function search_series(client::OECDClient, dataset::String; limit::Int=100)::Vec
     data = JSON3.read(response.body)
 
     # Extract dimension information
-    results = Dict{String, Any}[]
+    results = Dict{String,Any}[]
 
     if haskey(data, :structure) && haskey(data.structure, :dimensions)
         for dim_group in [:series, :observation]
@@ -352,17 +364,17 @@ function search_series(client::OECDClient, dataset::String; limit::Int=100)::Vec
                         "id" => dim.id,
                         "name" => get(dim, :name, ""),
                         "type" => String(dim_group),
-                        "values" => []
+                        "values" => [],
                     )
 
                     # Add available values for this dimension
                     if haskey(dim, :values) && length(results) < limit
                         for val in dim.values
                             if length(dim_info["values"]) < 20  # Limit values per dimension
-                                push!(dim_info["values"], Dict(
-                                    "id" => val.id,
-                                    "name" => get(val, :name, val.id)
-                                ))
+                                push!(
+                                    dim_info["values"],
+                                    Dict("id" => val.id, "name" => get(val, :name, val.id)),
+                                )
                             end
                         end
                     end
@@ -386,8 +398,8 @@ function search_series(client::OECDClient, dataset::String; limit::Int=100)::Vec
         client.cache,
         key,
         JSON3.write(results),
-        ttl=3600,  # Cache structure for 1 hour
-        metadata=Dict("source" => "oecd", "type" => "structure", "dataset" => dataset)
+        ttl = 3600,  # Cache structure for 1 hour
+        metadata = Dict("source" => "oecd", "type" => "structure", "dataset" => dataset),
     )
 
     return results
@@ -419,14 +431,15 @@ function get_dataset_info(client::OECDClient, dataset::String)::Dict
 
     # Fetch dataset structure
     url = "$(client.base_url)/$dataset/all/all"
-    response = HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"])
+    response =
+        HTTP.get(url, ["Accept" => "application/vnd.sdmx.data+json;version=1.0.0-wd"])
 
     data = JSON3.read(response.body)
 
     result = Dict(
         "dataset" => dataset,
         "name" => get(get(data, :structure, Dict()), :name, dataset),
-        "dimensions" => Dict{String, Any}()
+        "dimensions" => Dict{String,Any}(),
     )
 
     # Extract dimensions
@@ -437,7 +450,7 @@ function get_dataset_info(client::OECDClient, dataset::String)::Dict
                     result["dimensions"][dim.id] = Dict(
                         "name" => get(dim, :name, ""),
                         "role" => String(dim_group),
-                        "count" => haskey(dim, :values) ? length(dim.values) : 0
+                        "count" => haskey(dim, :values) ? length(dim.values) : 0,
                     )
                 end
             end

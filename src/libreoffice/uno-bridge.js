@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
 // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // SPDX-FileCopyrightText: 2024-2026 Hyperpolymath Contributors
+// deno-lint-ignore-file no-var no-inner-declarations no-unused-vars
+
+// LibreOffice's Rhino runtime requires ES5 syntax and invokes UNO_* globals externally.
 
 /**
  * uno-bridge.js - JavaScript Bridge to LibreOffice UNO API
@@ -504,7 +507,7 @@ function UNO_registerFunction(name, impl) {
  * @returns {*} Function result
  */
 function UNO_callFunction(name, args) {
-  if (!customFunctions.hasOwnProperty(name)) {
+  if (!Object.prototype.hasOwnProperty.call(customFunctions, name)) {
     throw new Error('Function "' + name + '" not registered');
   }
 
