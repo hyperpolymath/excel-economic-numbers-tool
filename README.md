@@ -3,7 +3,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 SPDX-FileCopyrightText: 2025-2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 -->
 
-[![Build Status](https://img.shields.io/github/workflow/status/hyperpolymath/excel-economic-numbers-tool/CI)](https://github.com/hyperpolymath/excel-economic-numbers-tool/actions) [![Coverage](https://img.shields.io/codecov/c/github/hyperpolymath/excel-economic-numbers-tool)](https://codecov.io/gh/hyperpolymath/excel-economic-numbers-tool)
+[![Build Status](https://img.shields.io/github/workflow/status/hyperpolymath/excel-economic-numbers-tool/CI)](https://github.com/hyperpolymath/excel-economic-numbers-tool/actions)
 [![Version](https://img.shields.io/npm/v/economic-toolkit-v2)](https://www.npmjs.com/package/economic-toolkit-v2)
 [![License: MPL-2.0](https://img.shields.io/badge/License-MPL_2.0--1.0-blue.svg)](https://github.com/hyperpolymath/palimpsest-license)
 [![RSR Compliance](https://img.shields.io/badge/RSR-89%25%20Bronze-cd7f32)](docs/standards/RSR.md)
