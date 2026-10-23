@@ -24,11 +24,11 @@ workflows:
         - 'docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302'
         - 'docker/setup-buildx-action@594f3bf4285d9ea8dc53c9a0c9c4092420091003'
         - 'julia-actions/julia-processcoverage@03114f09f119417c3242a9fb6e0b722676aedf38'
-        - 'julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32'
+        - 'julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687'
         - 'softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64'
     '.github/workflows/codeql.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'github/codeql-action@24c54180a607b1449ed407dd24f251e4e9147c8d'
+        - 'github/codeql-action@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee'
     '.github/workflows/docker-publish.yml':
         - 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -45,7 +45,7 @@ workflows:
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
         - 'denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed'
-        - 'julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32'
+        - 'julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687'
         - 'r-lib/actions@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05'
     '.github/workflows/pages.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -148,9 +148,9 @@ dependencies:
         commit: 'sha1-594f3bf4285d9ea8dc53c9a0c9c4092420091003'
         owner_id: 5429470
         repo_id: 288485773
-    'github/codeql-action@24c54180a607b1449ed407dd24f251e4e9147c8d':
-        ref: 'v4.38.3'
-        commit: 'sha1-24c54180a607b1449ed407dd24f251e4e9147c8d'
+    'github/codeql-action@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee':
+        ref: 'v4.39.0'
+        commit: 'sha1-6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee'
         owner_id: 9919
         repo_id: 259445878
     'haskell-actions/setup@0f8e8c99d88aeb3fbfd523f1ef2c6f762d10d64d':
@@ -168,9 +168,9 @@ dependencies:
         commit: 'sha1-03114f09f119417c3242a9fb6e0b722676aedf38'
         owner_id: 53965732
         repo_id: 249500631
-    'julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32':
-        ref: 'v3.0.2'
-        commit: 'sha1-fa02766e078afaaf09b14210362cee14137e6a32'
+    'julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687':
+        ref: 'v3.0.3'
+        commit: 'sha1-da908477b5db94c10ffce8cfea9f2b3b9d5db687'
         owner_id: 53965732
         repo_id: 202020219
     'peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697':
