@@ -28,7 +28,7 @@ workflows:
         - 'softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64'
     '.github/workflows/codeql.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'github/codeql-action@9b3254085494b55a0f7c4c2b3d2d52cc712ce370'
+        - 'github/codeql-action@1fc58d04a4d4374f921bdac573c3811c240f9c26'
     '.github/workflows/docker-publish.yml':
         - 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -148,9 +148,9 @@ dependencies:
         commit: 'sha1-594f3bf4285d9ea8dc53c9a0c9c4092420091003'
         owner_id: 5429470
         repo_id: 288485773
-    'github/codeql-action@9b3254085494b55a0f7c4c2b3d2d52cc712ce370':
-        ref: 'v4.39.1'
-        commit: 'sha1-9b3254085494b55a0f7c4c2b3d2d52cc712ce370'
+    'github/codeql-action@1fc58d04a4d4374f921bdac573c3811c240f9c26':
+        ref: 'v4.39.2'
+        commit: 'sha1-1fc58d04a4d4374f921bdac573c3811c240f9c26'
         owner_id: 9919
         repo_id: 259445878
     'haskell-actions/setup@0f8e8c99d88aeb3fbfd523f1ef2c6f762d10d64d':
