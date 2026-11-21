@@ -23,25 +23,25 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
         r-version: ['4.3']
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: actions/checkout@v7.0.1
       - name: Set up Julia ${{ matrix.julia-version }}
-        uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v2
+        uses: julia-actions/setup-julia@v3.0.3
         with:
           version: ${{ matrix.julia-version }}
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v5
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up R ${{ matrix.r-version }}
-        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        uses: r-lib/actions/setup-r@v2.14.0
         with:
           r-version: ${{ matrix.r-version }}
       - name: Set up Deno
-        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2
+        uses: denoland/setup-deno@v2.0.5
         with:
           deno-version: v2.0.x
       - name: Cache Julia packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v4
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.julia
           key: ${{ runner.os }}-julia-${{ matrix.julia-version }}-${{ hashFiles('**/Project.toml') }}
@@ -97,8 +97,8 @@ jobs:
     timeout-minutes: 15
     needs: integration-tests
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
-      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v2
+      - uses: actions/checkout@v7.0.1
+      - uses: julia-actions/setup-julia@v3.0.3
         with:
           version: '1.10'
       - name: Run performance benchmarks
