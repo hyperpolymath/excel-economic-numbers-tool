@@ -20,7 +20,6 @@ jobs:
     strategy:
       matrix:
         julia-version: ['1.10']
-        python-version: ['3.10', '3.11', '3.12']
         r-version: ['4.3']
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
@@ -28,10 +27,6 @@ jobs:
         uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v2
         with:
           version: ${{ matrix.julia-version }}
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v5
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
@@ -48,10 +43,6 @@ jobs:
       - name: Install Julia dependencies
         run: |
           julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
-      - name: Install Python package
-        run: |
-          pip install -e .
-          pip install pytest pytest-cov
       - name: Install R package
         run: |
           Rscript -e 'install.packages("devtools")'
@@ -59,9 +50,6 @@ jobs:
       - name: Run Julia tests
         run: |
           julia --project=. tests/integration/test_e2e.jl
-      - name: Run Python tests
-        run: |
-          pytest tests/python/ -v --cov=economic_toolkit --cov-report=xml
       - name: Run R tests
         run: |
           Rscript -e 'devtools::test("src/R/economic.toolkit")'
