@@ -43,7 +43,6 @@ workflows:
     '.github/workflows/integration-tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         - 'denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed'
         - 'julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687'
         - 'r-lib/actions@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05'
@@ -101,11 +100,6 @@ dependencies:
         commit: 'sha1-949feb2413d6458794dcd2491c4babbbce0c15c1'
         owner_id: 44036562
         repo_id: 189476904
-    'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0':
-        ref: 'v7.1.0'
-        commit: 'sha1-6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
-        owner_id: 44036562
-        repo_id: 192625525
     'actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f':
         ref: 'v7.0.0'
         commit: 'sha1-bbbca2ddaa5d8feaa63e36b76fdaad77386f024f'
