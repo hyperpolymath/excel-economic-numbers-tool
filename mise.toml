@@ -1,7 +1,6 @@
 [tools]
 # Language runtimes
 node = "latest"
-python = "latest"
 rust = "latest"
 go = "latest"
 zig = "latest"
@@ -45,8 +44,6 @@ jest = "latest"
 [env]
 # Common environment variables
 NODE_ENV = "development"
-PYTHONDONTWRITEBYTECODE = "1"
-PYTHONUNBUFFERED = "1"
 
 # Task runner alias
 [alias]
