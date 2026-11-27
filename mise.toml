@@ -6,7 +6,6 @@ bun = "latest"
 
 # Package managers
 cargo = "latest"
-go-task = "latest"
 
 # Formatting & Linting
 shfmt = "latest"
@@ -26,10 +25,6 @@ gnu-grep = "latest"
 
 [env]
 # Common environment variables
-
-# Task runner alias
-[alias]
-task = "go-task"
 
 [tasks.build]
 run = "cargo build --release"
